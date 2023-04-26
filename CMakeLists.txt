@@ -4,16 +4,14 @@ project(CrazyHouse)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(CrazyHouse
-        main.cpp
-        table.c++
-        move.c++
-        player.c++
-        ./protocol/protocol.c++
-        ./pieces/piece.c++
-        ./pieces/pawn.c++
-        ./pieces/rook.c++
-        ./pieces/knight.c++
-        ./pieces/bishop.c++
-        ./pieces/queen.c++
-        ./pieces/king.c++
+        overhaul/main.c++
+        overhaul/board.c++
+        overhaul/piece.c++
+        overhaul/player.c++
+        overhaul/pieces/pawn.c++
+        overhaul/pieces/rook.c++
+        overhaul/pieces/knight.c++
+        overhaul/pieces/bishop.c++
+        overhaul/pieces/queen.c++
+        overhaul/pieces/king.c++
         )
