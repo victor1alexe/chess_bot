@@ -27,7 +27,15 @@ public:
 	void reset();
 
 	position& operator[](piece* piece);
-	piece*& operator[](position position);
+	piece* operator[](position position);
+
+	bool is_valid_move(move m);
+	bool is_in_bounds(position position);
+
+	const player& get_white() const;
+	const player& get_black() const;
+
+	void make_move(move m);
 };
 
 

@@ -1,5 +1,5 @@
 //
-// Created by Eduard Andrei Radu on 26.04.2023.
+// Created by Eduard Andrei Radu and Ionescu Gabriel Lucian Smcherul on 26.04.2023.
 //
 
 #ifndef CRAZYHOUSE_PAWN_H
@@ -13,6 +13,7 @@ private:
 public:
 	pawn(player_type type, char file);
 	string to_string(style style);
+	vector<move> get_possible_moves();
 };
 
 #endif //CRAZYHOUSE_PAWN_H

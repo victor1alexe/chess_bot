@@ -12,6 +12,7 @@ private:
 public:
 	king(player_type type);
 	string to_string(style style);
+	vector<move> get_possible_moves();
 };
 
 

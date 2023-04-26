@@ -2,6 +2,7 @@
 // Created by Eduard Andrei Radu on 26.04.2023.
 //
 
+#include "../board.h"
 #include "queen.h"
 
 queen::queen(player_type type) : piece(type) {
@@ -27,4 +28,86 @@ string queen::to_string(style style) {
 			break;
 		default: break;
 	}
+}
+
+vector<move> queen::get_possible_moves() {
+	vector<move> moves;
+	board &board = board::get_instance();
+
+	position pos = board[this];
+	position next_pos;
+
+	// up
+	for (int i = 1; i <= 8 - pos.second; ++i) {
+		next_pos = position(pos.first, pos.second + i);
+		if (board.is_valid_move(move(pos, next_pos)))
+			moves.emplace_back(pos, next_pos);
+		else
+			break;
+	}
+
+	// down
+	for (int i = 1; i <= pos.second - 1; ++i) {
+		next_pos = position(pos.first, pos.second - i);
+		if (board.is_valid_move(move(pos, next_pos)))
+			moves.emplace_back(pos, next_pos);
+		else
+			break;
+	}
+
+	// left
+	for (int i = 1; i <= pos.first - 'A'; ++i) {
+		next_pos = position(pos.first - i, pos.second);
+		if (board.is_valid_move(move(pos, next_pos)))
+			moves.emplace_back(pos, next_pos);
+		else
+			break;
+	}
+
+	// right
+	for (int i = 1; i <= 'H' - pos.first; ++i) {
+		next_pos = position(pos.first + i, pos.second);
+		if (board.is_valid_move(move(pos, next_pos)))
+			moves.emplace_back(pos, next_pos);
+		else
+			break;
+	}
+
+	// up left
+	for (int i = 1; i < 8; i++) {
+		next_pos = position(pos.first - i, pos.second + i);
+		if (board.is_valid_move(move(pos, next_pos)))
+			moves.emplace_back(pos, next_pos);
+		else
+			break;
+	}
+
+	// up right
+	for (int i = 1; i < 8; i++) {
+		next_pos = position(pos.first + i, pos.second + i);
+		if (board.is_valid_move(move(pos, next_pos)))
+			moves.emplace_back(pos, next_pos);
+		else
+			break;
+	}
+
+	// down left
+	for (int i = 1; i < 8; i++) {
+		next_pos = position(pos.first - i, pos.second - i);
+		if (board.is_valid_move(move(pos, next_pos)))
+			moves.emplace_back(pos, next_pos);
+		else
+			break;
+	}
+
+	// down right
+	for (int i = 1; i < 8; i++) {
+		next_pos = position (pos.first + i, pos.second - i);
+		if (board.is_valid_move(move(pos, next_pos)))
+			moves.emplace_back(pos, next_pos);
+		else
+			break;
+	}
+
+	return moves;
 }

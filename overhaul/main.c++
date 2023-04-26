@@ -3,9 +3,13 @@
 //
 
 #include "board.h"
+#include <iostream>
+
+using std::cout, std::endl;
 
 int main() {
-	const board& b = board::get_instance();
+	board& b = board::get_instance();
 	b.display();
+	cout << endl;
 	return 0;
 }

@@ -24,6 +24,18 @@ void player::add_piece(piece *p) {
 	pieces_on_board.push_back(p);
 }
 
+void player::capture_piece(piece *p) {
+	pieces_in_hand.push_back(p);
+}
+
+void player::remove_piece(piece *p) {
+	pieces_on_board.erase(std::remove(pieces_on_board.begin(), pieces_on_board.end(), p), pieces_on_board.end());
+}
+
+void player::place_piece(piece *p) {
+	pieces_in_hand.erase(std::remove(pieces_in_hand.begin(), pieces_in_hand.end(), p), pieces_in_hand.end());
+}
+
 void player::init_pieces() {
 	pieces_on_board.push_back(new king(type));
 	pieces_on_board.push_back(new queen(type));
@@ -36,6 +48,15 @@ void player::init_pieces() {
 	for (char i = 'A'; i <= 'H'; i++) {
 		pieces_on_board.push_back(new pawn(type, i));
 	}
+}
+
+vector<move> player::get_possible_moves() const {
+	vector<move> moves = {};
+	for (auto piece : pieces_on_board) {
+		vector<move> piece_moves = piece->get_possible_moves();
+		moves.insert(moves.end(), piece_moves.begin(), piece_moves.end());
+	}
+	return moves;
 }
 
 auto player::begin() -> decltype(pieces_on_board.begin()) {

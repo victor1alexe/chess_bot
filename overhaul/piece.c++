@@ -25,4 +25,4 @@ string piece::to_string(style style) {
 	return "";
 }
 
-vector<position> piece::get_possible_moves() { return {}; }
+vector<move> piece::get_possible_moves() { return {}; }

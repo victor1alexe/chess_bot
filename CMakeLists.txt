@@ -8,6 +8,7 @@ add_executable(CrazyHouse
         overhaul/board.c++
         overhaul/piece.c++
         overhaul/player.c++
+        overhaul/move.c++
         overhaul/pieces/pawn.c++
         overhaul/pieces/rook.c++
         overhaul/pieces/knight.c++

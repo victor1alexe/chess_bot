@@ -19,11 +19,18 @@ public:
 	player() = default;
 	player(player_type type);
 	player_type get_type();
+
 	void add_piece(piece* p);
+	void capture_piece(piece* p);
+
+	void remove_piece(piece* p);
+	void place_piece(piece* p);
+
 	void init_pieces();
 	auto begin() -> decltype(pieces_on_board.begin());
 	auto end() -> decltype(pieces_on_board.end());
 	piece* operator[](int index);
+	vector<move> get_possible_moves() const;
 };
 
 #endif //CRAZYHOUSE_PLAYER_H

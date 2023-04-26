@@ -6,6 +6,7 @@
 #define CRAZYHOUSE_PIECE_H
 
 #include <string>
+#include "move.h"
 
 using std::string;
 using std::vector;
@@ -25,10 +26,11 @@ private:
 public:
 	piece(player_type type);
 	player_type get_type();
-	virtual string to_string(style style);
 	void set_default_position(position position);
 	position get_default_position();
-	virtual vector<position> get_possible_moves();
+
+	virtual string to_string(style style);
+	virtual vector<move> get_possible_moves();
 };
 
 #endif //CRAZYHOUSE_PIECE_H
