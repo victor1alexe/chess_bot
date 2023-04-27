@@ -4,6 +4,7 @@
 
 #include "../board.h"
 #include "pawn.h"
+#include "king.h"
 
 pawn::pawn(player_type type, char file) : piece(type), file(file) {
 	switch (type) {
@@ -71,6 +72,16 @@ vector<move> pawn::get_possible_moves() {
 			}
 
 			// en-passant
+			move last_move = board.get_last_move();
+			if (last_move == move(OUT, OUT)) break;
+			if (last_move.get_from().second == '7' &&
+                last_move.get_to().second == '5' &&
+                last_move.get_to().second == pos.second) {
+				if (last_move.get_to().first == pos.first + 1)
+					moves.emplace_back(pos, position(pos.first + 1, '6'));
+				if (last_move.get_to().first == pos.first - 1)
+					moves.emplace_back(pos, position(pos.first - 1, '6'));
+            }
 			break;
 		}
 		case BLACK: {
@@ -106,9 +117,55 @@ vector<move> pawn::get_possible_moves() {
 			}
 
 			// en-passant
+			move last_move = board.get_last_move();
+			if (last_move.get_from().second == '2' &&
+                last_move.get_to().second == '4' &&
+                last_move.get_to().second == pos.second) {
+                if (last_move.get_to().first == pos.first + 1)
+                    moves.emplace_back(pos, position(pos.first + 1, '3'));
+                if (last_move.get_to().first == pos.first - 1)
+                    moves.emplace_back(pos, position(pos.first - 1, '3'));
+            }
 			break;
 		}
 	}
 
     return moves;
+}
+
+bool pawn::see_king() {
+	board& board = board::get_instance();
+
+	position pos = board[this];
+	position next_pos;
+
+	switch (get_type()) {
+        case WHITE: {
+            // turn-right
+            next_pos = position(pos.first + 1, pos.second + 1);
+
+			if (would_be_in_check(move(pos, next_pos))) return true;
+
+            // turn-left
+            next_pos = position(pos.first - 1, pos.second + 1);
+
+			if (would_be_in_check(move(pos, next_pos))) return true;
+
+            break;
+        }
+        case BLACK: {
+            // turn-right
+            next_pos = position(pos.first + 1, pos.second - 1);
+
+			bool temp = would_be_in_check(move(pos, next_pos));
+			if (temp) return true;
+
+            // turn-left
+            next_pos = position(pos.first - 1, pos.second - 1);
+
+			if (would_be_in_check(move(pos, next_pos))) return true;
+
+            break;
+        }
+    }
 }

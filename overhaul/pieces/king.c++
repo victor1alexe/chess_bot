@@ -5,7 +5,7 @@
 #include "../board.h"
 #include "king.h"
 
-king::king(player_type type) : piece(type) {
+king::king(player_type type) : piece(type), short_castle(true), long_castle(true) {
 	switch (type) {
 		case WHITE:
 			set_default_position({'D', '1'});
@@ -78,4 +78,24 @@ vector<move> king::get_possible_moves() {
 		moves.emplace_back(pos, next_pos);
 
 	return moves;
+}
+
+bool king::see_king() {
+	return false;
+}
+
+bool king::can_short_castle() const {
+	return short_castle;
+}
+
+bool king::can_long_castle() const {
+	return long_castle;
+}
+
+void king::set_short_castle(bool sc) {
+	short_castle = sc;
+}
+
+void king::set_long_castle(bool lc) {
+	long_castle = lc;
 }

@@ -11,18 +11,24 @@ using std::string;
 using std::pair;
 using position = pair<char, char>;
 
+enum special_move { SHORT_CASTLE, LONG_CASTLE, EN_PASSANT, PROMOTION, NONE };
+
 class move {
 private:
+	special_move special = NONE;
 	position from;
 	position to;
 public:
-	move(const string& s);
+	explicit move(const string&& s);
 	move(position from, position to);
+	move(position from, position to, special_move special);
 	~move() = default;
 
-	position get_from();
-	position get_to();
+	position get_from() const;
+	position get_to() const;
+	special_move get_special() const;
 	string to_string() const;
+	bool operator == (const move& m);
 };
 
 #endif //CRAZYHOUSE_MOVE_H

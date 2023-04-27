@@ -13,6 +13,7 @@ public:
 	rook(player_type type, side side);
 	string to_string(style style);
 	vector<move> get_possible_moves();
+	bool see_king();
 };
 
 

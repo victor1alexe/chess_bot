@@ -15,4 +15,5 @@ add_executable(CrazyHouse
         overhaul/pieces/bishop.c++
         overhaul/pieces/queen.c++
         overhaul/pieces/king.c++
+        overhaul/debug/debug.c++
         )

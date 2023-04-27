@@ -112,6 +112,12 @@ build CMakeFiles/CrazyHouse.dir/overhaul/pieces/king.c++.o: CXX_COMPILER__CrazyH
   OBJECT_DIR = CMakeFiles/CrazyHouse.dir
   OBJECT_FILE_DIR = CMakeFiles/CrazyHouse.dir/overhaul/pieces
 
+build CMakeFiles/CrazyHouse.dir/overhaul/debug/debug.c++.o: CXX_COMPILER__CrazyHouse_Debug /Users/radueduard39/Documents/CrazyHouse/overhaul/debug/debug.c++ || cmake_object_order_depends_target_CrazyHouse
+  DEP_FILE = CMakeFiles/CrazyHouse.dir/overhaul/debug/debug.c++.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -mmacosx-version-min=13.2 -std=gnu++20
+  OBJECT_DIR = CMakeFiles/CrazyHouse.dir
+  OBJECT_FILE_DIR = CMakeFiles/CrazyHouse.dir/overhaul/debug
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target CrazyHouse
@@ -120,7 +126,7 @@ build CMakeFiles/CrazyHouse.dir/overhaul/pieces/king.c++.o: CXX_COMPILER__CrazyH
 #############################################
 # Link the executable CrazyHouse
 
-build CrazyHouse: CXX_EXECUTABLE_LINKER__CrazyHouse_Debug CMakeFiles/CrazyHouse.dir/overhaul/main.c++.o CMakeFiles/CrazyHouse.dir/overhaul/board.c++.o CMakeFiles/CrazyHouse.dir/overhaul/piece.c++.o CMakeFiles/CrazyHouse.dir/overhaul/player.c++.o CMakeFiles/CrazyHouse.dir/overhaul/move.c++.o CMakeFiles/CrazyHouse.dir/overhaul/pieces/pawn.c++.o CMakeFiles/CrazyHouse.dir/overhaul/pieces/rook.c++.o CMakeFiles/CrazyHouse.dir/overhaul/pieces/knight.c++.o CMakeFiles/CrazyHouse.dir/overhaul/pieces/bishop.c++.o CMakeFiles/CrazyHouse.dir/overhaul/pieces/queen.c++.o CMakeFiles/CrazyHouse.dir/overhaul/pieces/king.c++.o
+build CrazyHouse: CXX_EXECUTABLE_LINKER__CrazyHouse_Debug CMakeFiles/CrazyHouse.dir/overhaul/main.c++.o CMakeFiles/CrazyHouse.dir/overhaul/board.c++.o CMakeFiles/CrazyHouse.dir/overhaul/piece.c++.o CMakeFiles/CrazyHouse.dir/overhaul/player.c++.o CMakeFiles/CrazyHouse.dir/overhaul/move.c++.o CMakeFiles/CrazyHouse.dir/overhaul/pieces/pawn.c++.o CMakeFiles/CrazyHouse.dir/overhaul/pieces/rook.c++.o CMakeFiles/CrazyHouse.dir/overhaul/pieces/knight.c++.o CMakeFiles/CrazyHouse.dir/overhaul/pieces/bishop.c++.o CMakeFiles/CrazyHouse.dir/overhaul/pieces/queen.c++.o CMakeFiles/CrazyHouse.dir/overhaul/pieces/king.c++.o CMakeFiles/CrazyHouse.dir/overhaul/debug/debug.c++.o
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -mmacosx-version-min=13.2
   OBJECT_DIR = CMakeFiles/CrazyHouse.dir
   POST_BUILD = :

@@ -4,6 +4,7 @@
 
 #include "../board.h"
 #include "bishop.h"
+#include "king.h"
 
 bishop::bishop(player_type type, side side) : piece(type) {
 	switch (type) {
@@ -88,4 +89,25 @@ vector<move> bishop::get_possible_moves() {
 	}
 
 	return moves;
+}
+
+bool bishop::see_king() {
+	board& board = board::get_instance();
+	position pos = board[this];
+
+	for (int i = 1; i < 8; i++) {
+		position next_pos = position(pos.first - i, pos.second + i);
+		if (would_be_in_check(move(pos, next_pos))) return true;
+
+		next_pos = position(pos.first + i, pos.second + i);
+		if (would_be_in_check(move(pos, next_pos))) return true;
+
+		next_pos = position(pos.first - i, pos.second - i);
+		if (would_be_in_check(move(pos, next_pos))) return true;
+
+		next_pos = position(pos.first + i, pos.second - i);
+		if (would_be_in_check(move(pos, next_pos))) return true;
+	}
+
+	return false;
 }

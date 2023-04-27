@@ -89,3 +89,25 @@ vector<move> rook::get_possible_moves() {
 
 	return moves;
 }
+
+bool rook::see_king() {
+	board &board = board::get_instance();
+	position pos = board[this];
+	position next_pos;
+
+	for (int i = 1; i <= 8 - pos.second; ++i) {
+        next_pos = position(pos.first, pos.second + i);
+		if (would_be_in_check(move(pos, next_pos))) return true;
+
+		next_pos = position(pos.first, pos.second - i);
+		if (would_be_in_check(move(pos, next_pos))) return true;
+
+		next_pos = position(pos.first - i, pos.second);
+		if (would_be_in_check(move(pos, next_pos))) return true;
+
+		next_pos = position(pos.first + i, pos.second);
+		if (would_be_in_check(move(pos, next_pos))) return true;
+    }
+
+	return false;
+}

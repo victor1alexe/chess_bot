@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include "pieces/king.h"
 #include "board.h"
 
 using std::cout, std::endl;
@@ -29,18 +30,32 @@ piece *board::get_piece(position position) {
 	return pieces[position];
 }
 
+map<position, piece*> board::get_pieces() {
+    return pieces;
+}
+
 void board::display() const {
+	cout << "\u250F\u2501\u2501\u2501\u2533\u2501\u2501\u2501\u2533\u2501\u2501\u2501\u2533\u2501\u2501\u2501\u2533"
+	     << "\u2501\u2501\u2501\u2533\u2501\u2501\u2501\u2533\u2501\u2501\u2501\u2533\u2501\u2501\u2501\u2513"
+		 << endl;
 	for (char i = '8'; i >= '1'; i--) {
 		for (char j = 'A'; j <= 'H'; j++) {
 			position pos = position(j, i);
 			if (pieces.find(pos) == pieces.end()) {
-				cout << " ";
+				cout << "\u2503   ";
 			} else {
-				cout << pieces.at(pos)->to_string(DEBUG);
+				cout << "\u2503 " << pieces.at(pos)->to_string(DEBUG) << ' ';
 			}
 		}
-		cout << endl;
+		cout << "\u2503" << endl;
+		if (i != '1')
+			cout << "\u2523\u2501\u2501\u2501\u254B\u2501\u2501\u2501\u254B\u2501\u2501\u2501\u254B\u2501\u2501\u2501\u254B"
+			     << "\u2501\u2501\u2501\u254B\u2501\u2501\u2501\u254B\u2501\u2501\u2501\u254B\u2501\u2501\u2501\u252B"
+				 << endl;
 	}
+	cout << "\u2517\u2501\u2501\u2501\u253B\u2501\u2501\u2501\u253B\u2501\u2501\u2501\u253B\u2501\u2501\u2501\u253B"
+	     << "\u2501\u2501\u2501\u253B\u2501\u2501\u2501\u253B\u2501\u2501\u2501\u253B\u2501\u2501\u2501\u251B"
+		 << endl;
 }
 
 position& board::operator[](piece* piece) {
@@ -87,6 +102,11 @@ const player& board::get_black() const {
 	return black;
 }
 
+const move& board::get_last_move() const {
+	if (moves.empty()) return move(OUT, OUT);
+    return moves.top();
+}
+
 bool board::is_valid_move(move m) {
 //	Get start and end positions
 	const position to = m.get_to();
@@ -115,27 +135,71 @@ bool board::is_valid_move(move m) {
 }
 
 void board::make_move(move m) {
-//	Get start and end positions
 	const position to = m.get_to();
 	const position from = m.get_from();
 
-//	If the end position is out of bounds, return false
-	piece* attacker = get_piece(from);
-	piece* captured = get_piece(to);
+	piece* attacker = get_piece(from);;
+	piece* captured = nullptr;
 
-//	Get current player at start position
 	player& me = attacker->get_type() == WHITE ? white : black;
 	player& him = attacker->get_type() == WHITE ? black : white;
 
-	if (captured != nullptr) {
-		me.capture_piece(captured);
-		him.remove_piece(captured);
-		pieces.erase(to);
-		positions.erase(captured);
-	}
-	pieces.erase(from);
-	positions.erase(attacker);
 
-	pieces[to] = attacker;
-	positions[attacker] = to;
+
+	switch (m.get_special()) {
+		case SHORT_CASTLE:
+
+			break;
+		case LONG_CASTLE:
+
+			break;
+		case EN_PASSANT:
+
+			if (me.get_type() == WHITE)
+				captured = get_piece(position(to.first - 1, from.second));
+			else
+				captured = get_piece(position(to.first + 1, from.second));
+
+			me.capture_piece(captured);
+			him.remove_piece(captured);
+			pieces.erase(to);
+			positions.erase(captured);
+
+			pieces.erase(from);
+			positions.erase(attacker);
+
+			pieces[to] = attacker;
+			positions[attacker] = to;
+			break;
+
+		case PROMOTION:
+
+			break;
+		default:
+			captured = get_piece(to);
+
+			if (typeid(attacker) == typeid(king)) {
+				dynamic_cast<king*>(attacker)->set_short_castle(false);
+				dynamic_cast<king*>(attacker)->set_long_castle(false);
+			}
+
+			if (captured != nullptr) {
+				me.capture_piece(captured);
+				him.remove_piece(captured);
+				pieces.erase(to);
+				positions.erase(captured);
+			}
+			pieces.erase(from);
+			positions.erase(attacker);
+
+			pieces[to] = attacker;
+			positions[attacker] = to;
+			break;
+	}
+
+	if (attacker->see_king())
+		cout << "CHECK" << endl;
+
+	him.set_in_check(attacker->see_king());
+	moves.push(m);
 }

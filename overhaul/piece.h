@@ -12,6 +12,7 @@ using std::string;
 using std::vector;
 
 using position = std::pair<char, char>;
+string to_string(position p);
 
 static position OUT = position('0', '0');
 
@@ -31,6 +32,9 @@ public:
 
 	virtual string to_string(style style);
 	virtual vector<move> get_possible_moves();
+
+	virtual bool would_be_in_check(move m);
+	virtual bool see_king();
 };
 
 #endif //CRAZYHOUSE_PIECE_H

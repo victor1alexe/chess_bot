@@ -2,17 +2,23 @@
 // Created by Eduard Andrei Radu on 21.04.2023.
 //
 
+#include <utility>
+
 #include "move.h"
 
-move::move(pair<char, char> from, pair<char, char> to) {this->from = from;this->to = to;}
+move::move(position from, position to) : from(std::move(from)), to(std::move(to)) {}
 
-position move::get_from() { return from; }
-position move::get_to() { return to; }
+position move::get_from() const { return from; }
+position move::get_to() const { return to; }
 
-move::move(const string& s) {
+move::move(const string&& s) {
 	this->from = position (toupper(s[0]), s[1]);
 	this->to = position (toupper(s[2]), s[3]);
 }
+
+special_move move::get_special() const { return special; }
+
+move::move(position from, position to, special_move special) : from(std::move(from)), to(std::move(to)), special(special) {}
 
 string move::to_string() const {
 	string s(4, ' ');
@@ -22,4 +28,8 @@ string move::to_string() const {
 	s[3] = to.second;
 
 	return s;
+}
+
+bool move::operator == (const move& m) {
+	return from == m.from && to == m.to && special == m.special;
 }

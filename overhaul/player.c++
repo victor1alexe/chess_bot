@@ -14,6 +14,7 @@
 player::player(player_type type) : type(type) {
 	pieces_on_board = {};
 	pieces_in_hand = {};
+	in_check = false;
 }
 
 player_type player::get_type() {
@@ -48,6 +49,10 @@ void player::init_pieces() {
 	for (char i = 'A'; i <= 'H'; i++) {
 		pieces_on_board.push_back(new pawn(type, i));
 	}
+}
+
+void player::set_in_check(bool in_check) {
+	this->in_check = in_check;
 }
 
 vector<move> player::get_possible_moves() const {
