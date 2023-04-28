@@ -33,7 +33,7 @@ public:
 	virtual string to_string(style style);
 	virtual vector<move> get_possible_moves();
 
-	virtual bool would_be_in_check(move m);
+	virtual bool get_to_king(move m);
 	virtual bool see_king();
 };
 

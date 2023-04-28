@@ -38,7 +38,8 @@ void player::place_piece(piece *p) {
 }
 
 void player::init_pieces() {
-	pieces_on_board.push_back(new king(type));
+	my_king = new king(type);
+	pieces_on_board.push_back(my_king);
 	pieces_on_board.push_back(new queen(type));
 	pieces_on_board.push_back(new rook(type, QUEEN));
 	pieces_on_board.push_back(new rook(type, KING));
@@ -53,6 +54,10 @@ void player::init_pieces() {
 
 void player::set_in_check(bool in_check) {
 	this->in_check = in_check;
+}
+
+bool player::is_in_check() const {
+	return in_check;
 }
 
 vector<move> player::get_possible_moves() const {
@@ -76,3 +81,6 @@ piece *player::operator[](int index) {
 	return pieces_on_board[index];
 }
 
+piece* player::get_king() const {
+	return my_king;
+}

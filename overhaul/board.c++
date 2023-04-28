@@ -15,7 +15,7 @@ board& board::get_instance() {
 	return *instance;
 }
 
-board::board() : white(WHITE), black(BLACK){
+board::board() : white(WHITE), black(BLACK), _backup(nullptr) {
 	reset();
 }
 
@@ -28,10 +28,6 @@ piece *board::get_piece(position position) {
 		return nullptr;
 	}
 	return pieces[position];
-}
-
-map<position, piece*> board::get_pieces() {
-    return pieces;
 }
 
 void board::display() const {
@@ -103,8 +99,95 @@ const player& board::get_black() const {
 }
 
 const move& board::get_last_move() const {
-	if (moves.empty()) return move(OUT, OUT);
+	if (moves.empty()) return move::START;
     return moves.top();
+}
+
+bool board::would_be_check(move m) {
+	board& b = get_instance();
+
+	b.make_backup();
+	b.make_move(m);
+
+	piece *k = (get_piece(m.get_to())->get_type() == WHITE) ? white.get_king() : black.get_king();
+	position king_pos = positions[k];
+
+	bool would_be_in_check = false;
+	position p;
+	vector<piece*> pieces = {};
+
+	for (int i = 0; i < 8; i++) {
+		p = position(king_pos.first + i, king_pos.second + i);
+		if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
+			pieces.push_back(b[p]);
+			break;
+		}
+	}
+
+	for (int i = 0; i < 8; i++) {
+		p = position(king_pos.first - i, king_pos.second + i);
+		if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
+			pieces.push_back(b[p]);
+			break;
+		}
+	}
+
+	for (int i = 0; i < 8; i++) {
+		p = position(king_pos.first + i, king_pos.second - i);
+		if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
+			pieces.push_back(b[p]);
+			break;
+		}
+	}
+
+	for (int i = 0; i < 8; i++) {
+		p = position(king_pos.first - i, king_pos.second - i);
+		if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
+			pieces.push_back(b[p]);
+			break;
+		}
+	}
+
+	for (int i = 0; i < 8; i++) {
+		p = position(king_pos.first + i, king_pos.second);
+		if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
+			pieces.push_back(b[p]);
+			break;
+		}
+	}
+
+	for (int i = 0; i < 8; i++) {
+		p = position(king_pos.first - i, king_pos.second);
+		if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
+			pieces.push_back(b[p]);
+			break;
+		}
+	}
+
+	for (int i = 0; i < 8; i++) {
+		p = position(king_pos.first, king_pos.second + i);
+		if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
+			pieces.push_back(b[p]);
+			break;
+		}
+	}
+
+	for (int i = 0; i < 8; i++) {
+		p = position(king_pos.first, king_pos.second - i);
+		if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
+			pieces.push_back(b[p]);
+			break;
+		}
+	}
+
+	std::for_each(pieces.begin(), pieces.end(), [&](piece* p) {
+		if (p->see_king()) {
+			would_be_in_check = true;
+		}
+	});
+
+	b.restore();
+	return would_be_in_check;
 }
 
 bool board::is_valid_move(move m) {
@@ -119,6 +202,10 @@ bool board::is_valid_move(move m) {
 	bool in_bounds = is_in_bounds(to);
 	if (!in_bounds) return false;
 
+// 	If the move puts the king in check, return false
+	bool would_be_in_check = would_be_check(m);
+	if (would_be_in_check) return false;
+
 //	If the end position is empty, return true
 	bool is_empty = get_piece(to) == nullptr;
 	if(is_empty) return true;
@@ -127,11 +214,7 @@ bool board::is_valid_move(move m) {
 	bool is_available = get_piece(to)->get_type() != p;
 	if (!is_available) return false;
 
-//	TODO: check if the move would put the king in check
-// 	If the move would put the king in check, return false
-	bool would_be_in_check = false;
-
-	return !would_be_in_check;
+	return true;
 }
 
 void board::make_move(move m) {
@@ -144,17 +227,13 @@ void board::make_move(move m) {
 	player& me = attacker->get_type() == WHITE ? white : black;
 	player& him = attacker->get_type() == WHITE ? black : white;
 
-
-
 	switch (m.get_special()) {
 		case SHORT_CASTLE:
-
+//			TODO: Implement castling
 			break;
 		case LONG_CASTLE:
-
 			break;
 		case EN_PASSANT:
-
 			if (me.get_type() == WHITE)
 				captured = get_piece(position(to.first - 1, from.second));
 			else
@@ -173,7 +252,6 @@ void board::make_move(move m) {
 			break;
 
 		case PROMOTION:
-
 			break;
 		default:
 			captured = get_piece(to);
@@ -197,9 +275,38 @@ void board::make_move(move m) {
 			break;
 	}
 
-	if (attacker->see_king())
-		cout << "CHECK" << endl;
-
 	him.set_in_check(attacker->see_king());
 	moves.push(m);
+}
+
+map<piece*, position> board::get_positions() {
+	return positions;
+}
+
+map<position, piece*> board::get_pieces() {
+	return pieces;
+}
+
+stack<move> board::get_moves() {
+	return moves;
+}
+
+backup::backup() {
+	pieces_cp = board::get_instance().get_pieces();
+	positions_cp = board::get_instance().get_positions();
+	moves_cp = board::get_instance().get_moves();
+	white_cp = board::get_instance().get_white();
+	black_cp = board::get_instance().get_black();
+}
+
+void board::make_backup() {
+	_backup = new backup();
+}
+
+void board::restore() {
+	pieces = _backup->pieces_cp;
+	positions = _backup->positions_cp;
+	moves = _backup->moves_cp;
+	white = _backup->white_cp;
+	black = _backup->black_cp;
 }

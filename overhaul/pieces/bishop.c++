@@ -4,7 +4,6 @@
 
 #include "../board.h"
 #include "bishop.h"
-#include "king.h"
 
 bishop::bishop(player_type type, side side) : piece(type) {
 	switch (type) {
@@ -97,16 +96,16 @@ bool bishop::see_king() {
 
 	for (int i = 1; i < 8; i++) {
 		position next_pos = position(pos.first - i, pos.second + i);
-		if (would_be_in_check(move(pos, next_pos))) return true;
+		if (get_to_king(move(pos, next_pos))) return true;
 
 		next_pos = position(pos.first + i, pos.second + i);
-		if (would_be_in_check(move(pos, next_pos))) return true;
+		if (get_to_king(move(pos, next_pos))) return true;
 
 		next_pos = position(pos.first - i, pos.second - i);
-		if (would_be_in_check(move(pos, next_pos))) return true;
+		if (get_to_king(move(pos, next_pos))) return true;
 
 		next_pos = position(pos.first + i, pos.second - i);
-		if (would_be_in_check(move(pos, next_pos))) return true;
+		if (get_to_king(move(pos, next_pos))) return true;
 	}
 
 	return false;

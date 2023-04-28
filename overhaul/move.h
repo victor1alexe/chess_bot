@@ -19,6 +19,7 @@ private:
 	position from;
 	position to;
 public:
+	static const move START;
 	explicit move(const string&& s);
 	move(position from, position to);
 	move(position from, position to, special_move special);

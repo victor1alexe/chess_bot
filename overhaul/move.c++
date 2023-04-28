@@ -2,11 +2,14 @@
 // Created by Eduard Andrei Radu on 21.04.2023.
 //
 
-#include <utility>
-
 #include "move.h"
+#include "piece.h"
 
-move::move(position from, position to) : from(std::move(from)), to(std::move(to)) {}
+const move move::START = move(OUT, OUT);
+
+move::move(position from, position to)
+: 	from(std::move(from)),
+	to(std::move(to)) {}
 
 position move::get_from() const { return from; }
 position move::get_to() const { return to; }

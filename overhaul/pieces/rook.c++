@@ -97,16 +97,16 @@ bool rook::see_king() {
 
 	for (int i = 1; i <= 8 - pos.second; ++i) {
         next_pos = position(pos.first, pos.second + i);
-		if (would_be_in_check(move(pos, next_pos))) return true;
+		if (get_to_king(move(pos, next_pos))) return true;
 
 		next_pos = position(pos.first, pos.second - i);
-		if (would_be_in_check(move(pos, next_pos))) return true;
+		if (get_to_king(move(pos, next_pos))) return true;
 
 		next_pos = position(pos.first - i, pos.second);
-		if (would_be_in_check(move(pos, next_pos))) return true;
+		if (get_to_king(move(pos, next_pos))) return true;
 
 		next_pos = position(pos.first + i, pos.second);
-		if (would_be_in_check(move(pos, next_pos))) return true;
+		if (get_to_king(move(pos, next_pos))) return true;
     }
 
 	return false;

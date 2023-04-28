@@ -16,6 +16,7 @@ private:
 	vector<piece*> pieces_on_board;
 	vector<piece*> pieces_in_hand;
 	bool in_check;
+	piece* my_king;
 public:
 	player() = default;
 	player(player_type type);
@@ -27,7 +28,10 @@ public:
 	void remove_piece(piece* p);
 	void place_piece(piece* p);
 
+	piece* get_king() const;
+
 	void set_in_check(bool in_check);
+	bool is_in_check() const;
 
 	void init_pieces();
 	auto begin() -> decltype(pieces_on_board.begin());

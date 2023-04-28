@@ -4,8 +4,8 @@
 
 #include "piece.h"
 #include "board.h"
-#include "pieces/king.h"
 #include <iostream>
+
 using std::cout, std::endl;
 
 void piece::set_default_position(position position) {
@@ -32,23 +32,23 @@ string piece::to_string(style style) {
 vector<move> piece::get_possible_moves() { return {}; }
 
 string to_string(char c) {
-	return string(1, c);
+	return {1, c};
 }
 
 string to_string(position p) {
 	return "" + to_string(p.first) + to_string(p.second);
 }
 
-bool piece::would_be_in_check(move m) {
+bool piece::get_to_king(move m) {
 	board& board = board::get_instance();
 
 	position pos = m.get_from();
 	position next_pos = m.get_to();
 
-	return board.is_valid_move(move(pos, next_pos))
+	return board.is_in_bounds(next_pos)
 			&& board[next_pos] != nullptr
 			&& board[next_pos]->get_type() != get_type()
-			&& typeid(board[next_pos]) == typeid(king);
+			&& board[next_pos] == (get_type() == WHITE ? board.get_black() : board.get_white()).get_king();
 }
 
-bool piece::see_king() { return false; };
+bool piece::see_king() { return false; }

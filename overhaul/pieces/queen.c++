@@ -4,7 +4,6 @@
 
 #include "../board.h"
 #include "queen.h"
-#include "king.h"
 
 queen::queen(player_type type) : piece(type) {
 	switch (type) {
@@ -123,47 +122,47 @@ bool queen::see_king() {
 	for (int i = 1; i <= 8 - pos.second; ++i) {
         next_pos = position(pos.first, pos.second + i);
 
-		if (would_be_in_check(move(pos, next_pos))) return true;
+		if (get_to_king(move(pos, next_pos))) return true;
     }
 
 	// down
 	for (int i = 1; i <= pos.second - 1; ++i) {
         next_pos = position(pos.first, pos.second - i);
 
-        if (would_be_in_check(move(pos, next_pos))) return true;
+        if (get_to_king(move(pos, next_pos))) return true;
     }
 
 	// left
 	for (int i = 1; i <= pos.first - 'A'; ++i) {
         next_pos = position(pos.first - i, pos.second);
 
-        if (would_be_in_check(move(pos, next_pos))) return true;
+        if (get_to_king(move(pos, next_pos))) return true;
     }
 
 	// right
 	for (int i = 1; i <= 'H' - pos.first; ++i) {
         next_pos = position(pos.first + i, pos.second);
 
-        if (would_be_in_check(move(pos, next_pos))) return true;
+        if (get_to_king(move(pos, next_pos))) return true;
     }
 
 	// diagonals
 	for (int i = 1; i < 8; i++) {
         // up left
         next_pos = position(pos.first - i, pos.second + i);
-        if (would_be_in_check(move(pos, next_pos))) return true;
+        if (get_to_king(move(pos, next_pos))) return true;
 
         // up right
         next_pos = position(pos.first + i, pos.second + i);
-        if (would_be_in_check(move(pos, next_pos))) return true;
+        if (get_to_king(move(pos, next_pos))) return true;
 
         // down left
         next_pos = position(pos.first - i, pos.second - i);
-        if (would_be_in_check(move(pos, next_pos))) return true;
+        if (get_to_king(move(pos, next_pos))) return true;
 
         // down right
         next_pos = position (pos.first + i, pos.second - i);
-        if (would_be_in_check(move(pos, next_pos))) return true;
+        if (get_to_king(move(pos, next_pos))) return true;
     }
 	return false;
 }

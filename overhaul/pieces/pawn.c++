@@ -4,7 +4,6 @@
 
 #include "../board.h"
 #include "pawn.h"
-#include "king.h"
 
 pawn::pawn(player_type type, char file) : piece(type), file(file) {
 	switch (type) {
@@ -73,7 +72,7 @@ vector<move> pawn::get_possible_moves() {
 
 			// en-passant
 			move last_move = board.get_last_move();
-			if (last_move == move(OUT, OUT)) break;
+			if (last_move == move::START) break;
 			if (last_move.get_from().second == '7' &&
                 last_move.get_to().second == '5' &&
                 last_move.get_to().second == pos.second) {
@@ -144,12 +143,12 @@ bool pawn::see_king() {
             // turn-right
             next_pos = position(pos.first + 1, pos.second + 1);
 
-			if (would_be_in_check(move(pos, next_pos))) return true;
+			if (get_to_king(move(pos, next_pos))) return true;
 
             // turn-left
             next_pos = position(pos.first - 1, pos.second + 1);
 
-			if (would_be_in_check(move(pos, next_pos))) return true;
+			if (get_to_king(move(pos, next_pos))) return true;
 
             break;
         }
@@ -157,15 +156,16 @@ bool pawn::see_king() {
             // turn-right
             next_pos = position(pos.first + 1, pos.second - 1);
 
-			bool temp = would_be_in_check(move(pos, next_pos));
+			bool temp = get_to_king(move(pos, next_pos));
 			if (temp) return true;
 
             // turn-left
             next_pos = position(pos.first - 1, pos.second - 1);
 
-			if (would_be_in_check(move(pos, next_pos))) return true;
+			if (get_to_king(move(pos, next_pos))) return true;
 
             break;
         }
     }
+	return false;
 }

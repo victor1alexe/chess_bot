@@ -1,5 +1,5 @@
 //
-// Created by Eduard Andrei Radu and Ionescu Gabriel Lucian Smcherul on 26.04.2023.
+// Created by Eduard Andrei Radu and Ionescu Gabriel Lucian on 26.04.2023.
 //
 
 #ifndef CRAZYHOUSE_PAWN_H

@@ -81,7 +81,7 @@ vector<move> king::get_possible_moves() {
 }
 
 bool king::see_king() {
-	return false;
+	return true;
 }
 
 bool king::can_short_castle() const {
