@@ -48,7 +48,7 @@ bool piece::get_to_king(move m) {
 	return board.is_in_bounds(next_pos)
 			&& board[next_pos] != nullptr
 			&& board[next_pos]->get_type() != get_type()
-			&& board[next_pos] == (get_type() == WHITE ? board.get_black() : board.get_white()).get_king();
+			&& board[next_pos] == ((get_type() == WHITE) ? board.get_black().get_king() : board.get_white().get_king());
 }
 
 bool piece::see_king() { return false; }

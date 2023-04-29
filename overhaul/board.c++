@@ -217,6 +217,107 @@ bool board::is_valid_move(move m) {
 	return true;
 }
 
+bool board::is_castle_possible(player_type p_t, side s) {
+	player p = (p_t == WHITE) ? white : black;
+	switch (p_t) {
+		case WHITE:
+			switch (s) {
+				case QUEEN:
+					if (p.can_long_castle()) {
+						piece* queen = (*this)[{'D', '1'}];
+						piece* bishop = (*this)[{'C', '1'}];
+						piece* knight = (*this)[{'B', '1'}];
+						if (queen != nullptr && bishop != nullptr && knight != nullptr) return false;
+						make_backup();
+						if (would_be_check(move("E1D1"))) {
+							restore();
+							return false;
+						}
+						restore();
+
+						if (would_be_check(move("E1C1"))) {
+							restore();
+							return false;
+						}
+						return true;
+					}
+					break;
+				case KING:
+					if (p.can_short_castle()) {
+						piece* bishop = (*this)[{'F', '1'}];
+						piece* knight = (*this)[{'G', '1'}];
+						if (bishop != nullptr && knight != nullptr) return false;
+						make_backup();
+						if (would_be_check(move("E1F1"))) {
+							restore();
+							return false;
+						}
+						restore();
+
+						if (would_be_check(move("E1G1"))) {
+							restore();
+							return false;
+						}
+
+						return true;
+					}
+					break;
+				default:
+					break;
+			}
+			break;
+		case BLACK:
+			switch (s) {
+				case QUEEN:
+					if (p.can_long_castle()) {
+						piece* queen = (*this)[{'D', '8'}];
+						piece* bishop = (*this)[{'C', '8'}];
+						piece* knight = (*this)[{'B', '8'}];
+						if (queen != nullptr && bishop != nullptr && knight != nullptr) return false;
+						make_backup();
+						if (would_be_check(move("E8D8"))) {
+							restore();
+							return false;
+						}
+						restore();
+
+						if (would_be_check(move("E8C8"))) {
+							restore();
+							return false;
+						}
+						return true;
+					}
+					break;
+				case KING:
+					if (p.can_short_castle()) {
+						piece* bishop = (*this)[{'F', '8'}];
+						piece* knight = (*this)[{'G', '8'}];
+						if (bishop != nullptr && knight != nullptr) return false;
+						make_backup();
+						if (would_be_check(move("E8F8"))) {
+							restore();
+							return false;
+						}
+						restore();
+
+						if (would_be_check(move("E8G8"))) {
+							restore();
+							return false;
+						}
+
+						return true;
+					}
+					break;
+				default:
+					break;
+			}
+			break;
+		default:
+			break;
+	}
+	return false;
+}
+
 void board::make_move(move m) {
 	const position to = m.get_to();
 	const position from = m.get_from();
@@ -256,10 +357,7 @@ void board::make_move(move m) {
 		default:
 			captured = get_piece(to);
 
-			if (typeid(attacker) == typeid(king)) {
-				dynamic_cast<king*>(attacker)->set_short_castle(false);
-				dynamic_cast<king*>(attacker)->set_long_castle(false);
-			}
+			// TODO: CASTLE
 
 			if (captured != nullptr) {
 				me.capture_piece(captured);
@@ -276,6 +374,7 @@ void board::make_move(move m) {
 	}
 
 	him.set_in_check(attacker->see_king());
+	me.set_in_check(false);
 	moves.push(m);
 }
 

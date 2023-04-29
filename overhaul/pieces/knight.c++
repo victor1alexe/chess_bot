@@ -102,35 +102,90 @@ bool knight::see_king() {
 
 	// 2 up 1 right
 	next_pos = position(pos.first + 1, pos.second + 2);
-	if (get_to_king(move(pos, next_pos))) return true;
+//	If it can see a piece
+	if (board.is_in_bounds(next_pos)
+		&& board[next_pos] != nullptr
+		&& board[next_pos]->get_type() != get_type()) {
+//			If piece found is king
+			if (board[next_pos] == ((get_type() == WHITE) ? board.get_black().get_king() : board.get_white().get_king()))
+				return true;
+	}
 
 	// 2 up 1 left
 	next_pos = position(pos.first - 1, pos.second + 2);
-	if (get_to_king(move(pos, next_pos))) return true;
+//	If it can see a piece
+	if (board.is_in_bounds(next_pos)
+		&& board[next_pos] != nullptr
+		&& board[next_pos]->get_type() != get_type()) {
+//			If piece found is king
+		if (board[next_pos] == ((get_type() == WHITE) ? board.get_black().get_king() : board.get_white().get_king()))
+			return true;
+	}
 
 	// 2 down 1 right
 	next_pos = position(pos.first + 1, pos.second - 2);
-	if (get_to_king(move(pos, next_pos))) return true;
-
+//	If it can see a piece
+	if (board.is_in_bounds(next_pos)
+		&& board[next_pos] != nullptr
+		&& board[next_pos]->get_type() != get_type()) {
+//			If piece found is king
+		if (board[next_pos] == ((get_type() == WHITE) ? board.get_black().get_king() : board.get_white().get_king()))
+			return true;
+	}
 	// 2 down 1 left
 	next_pos = position(pos.first - 1, pos.second - 2);
-	if (get_to_king(move(pos, next_pos))) return true;
+//	If it can see a piece
+	if (board.is_in_bounds(next_pos)
+		&& board[next_pos] != nullptr
+		&& board[next_pos]->get_type() != get_type()) {
+//			If piece found is king
+		if (board[next_pos] == ((get_type() == WHITE) ? board.get_black().get_king() : board.get_white().get_king()))
+			return true;
+	}
 
 	// 2 right 1 up
 	next_pos = position(pos.first + 2, pos.second + 1);
-	if (get_to_king(move(pos, next_pos))) return true;
+//	If it can see a piece
+	if (board.is_in_bounds(next_pos)
+		&& board[next_pos] != nullptr
+		&& board[next_pos]->get_type() != get_type()) {
+//			If piece found is king
+		if (board[next_pos] == ((get_type() == WHITE) ? board.get_black().get_king() : board.get_white().get_king()))
+			return true;
+	}
 
 	// 2 right 1 down
 	next_pos = position(pos.first + 2, pos.second - 1);
-	if (get_to_king(move(pos, next_pos))) return true;
+//	If it can see a piece
+	if (board.is_in_bounds(next_pos)
+		&& board[next_pos] != nullptr
+		&& board[next_pos]->get_type() != get_type()) {
+//			If piece found is king
+		if (board[next_pos] == ((get_type() == WHITE) ? board.get_black().get_king() : board.get_white().get_king()))
+			return true;
+	}
 
 	// 2 left 1 up
 	next_pos = position(pos.first - 2, pos.second + 1);
-	if (get_to_king(move(pos, next_pos))) return true;
+//	If it can see a piece
+	if (board.is_in_bounds(next_pos)
+		&& board[next_pos] != nullptr
+		&& board[next_pos]->get_type() != get_type()) {
+//			If piece found is king
+		if (board[next_pos] == ((get_type() == WHITE) ? board.get_black().get_king() : board.get_white().get_king()))
+			return true;
+	}
 
 	// 2 left 1 down
 	next_pos = position(pos.first - 2, pos.second - 1);
-	if (get_to_king(move(pos, next_pos))) return true;
+//	If it can see a piece
+	if (board.is_in_bounds(next_pos)
+		&& board[next_pos] != nullptr
+		&& board[next_pos]->get_type() != get_type()) {
+//			If piece found is king
+		if (board[next_pos] == ((get_type() == WHITE) ? board.get_black().get_king() : board.get_white().get_king()))
+			return true;
+	}
 
 	return false;
 }

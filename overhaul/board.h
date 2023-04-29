@@ -58,6 +58,8 @@ public:
 
 	void make_backup();
 	void restore();
+
+	bool is_castle_possible(player_type p_t, side s);
 };
 
 

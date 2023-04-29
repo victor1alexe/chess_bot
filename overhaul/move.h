@@ -20,6 +20,10 @@ private:
 	position to;
 public:
 	static const move START;
+	static const move LONG_CASTLE_WHITE;
+	static const move LONG_CASTLE_BLACK;
+	static const move SHORT_CASTLE_WHITE;
+	static const move SHORT_CASTLE_BLACK;
 	explicit move(const string&& s);
 	move(position from, position to);
 	move(position from, position to, special_move special);

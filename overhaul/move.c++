@@ -6,6 +6,10 @@
 #include "piece.h"
 
 const move move::START = move(OUT, OUT);
+const move move::LONG_CASTLE_WHITE = move({'l', 'c'},{'s', 'w'});
+const move move::LONG_CASTLE_BLACK = move({'l', 'c'},{'s', 'b'});
+const move move::SHORT_CASTLE_WHITE = move({'s', 'c'},{'s', 'w'});
+const move move::SHORT_CASTLE_BLACK = move({'s', 'c'},{'s', 'b'});
 
 move::move(position from, position to)
 : 	from(std::move(from)),

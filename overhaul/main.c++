@@ -6,17 +6,20 @@
 #include "debug/debug.h"
 #include "move.h"
 #include <iostream>
+#include <ctime>
 
 using std::cout, std::endl;
 
 int main() {
+	srand(time(nullptr));
 	board& b = board::get_instance();
 
 	debug::init_debug();
 	debug::print_board();
 
-	while (true) {
+	for (int i = 0; i < 10000; i++) {
 		vector<move> moves = b.get_white().get_possible_moves();
+
 		if (moves.empty() && b.get_white().is_in_check()) {
 			cout << "Black wins!"
 				 << endl;
@@ -29,9 +32,10 @@ int main() {
 
 		b.make_move(moves[rand() % moves.size()]);
 		debug::print_last_move();
-		if (b.get_white().is_in_check())
-			cout << "White is in check!" << endl;
+
 		debug::print_board();
+		if (b.get_black().is_in_check())
+			cout << "Black is in check!" << endl;
 
 		moves = b.get_black().get_possible_moves();
 		if (moves.empty() && b.get_black().is_in_check()) {
@@ -43,11 +47,13 @@ int main() {
 				 << endl;
 			break;
 		}
+
 		b.make_move(moves[rand() % moves.size()]);
-		if (b.get_black().is_in_check())
-			cout << "Black is in check!" << endl;
 		debug::print_last_move();
+
 		debug::print_board();
+		if (b.get_white().is_in_check())
+			cout << "White is in check!" << endl;
 	}
 
 //	vector<move> moves = b.get_white().get_possible_moves();

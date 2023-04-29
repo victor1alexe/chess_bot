@@ -5,13 +5,13 @@
 #include "../board.h"
 #include "king.h"
 
-king::king(player_type type) : piece(type), short_castle(true), long_castle(true) {
+king::king(player_type type) : piece(type) {
 	switch (type) {
 		case WHITE:
-			set_default_position({'D', '1'});
+			set_default_position({'E', '1'});
 			break;
 		case BLACK:
-			set_default_position({'D', '8'});
+			set_default_position({'E', '8'});
 			break;
 	}
 }
@@ -77,25 +77,55 @@ vector<move> king::get_possible_moves() {
 	if(board.is_valid_move(move(pos, next_pos)))
 		moves.emplace_back(pos, next_pos);
 
+	// castling long
+	// TODO: castling
+
 	return moves;
 }
 
 bool king::see_king() {
-	return true;
-}
+	board &board = board::get_instance();
+	position pos = board[this];
+	position next_pos;
+	// up
+	next_pos = position(pos.first, pos.second + 1);
+	if(board[next_pos] == ((get_type() == WHITE) ? board.get_black().get_king() : board.get_white().get_king()))
+		return true;
 
-bool king::can_short_castle() const {
-	return short_castle;
-}
 
-bool king::can_long_castle() const {
-	return long_castle;
-}
+	// down
+	next_pos = position(pos.first, pos.second - 1);
+	if(board[next_pos] == ((get_type() == WHITE) ? board.get_black().get_king() : board.get_white().get_king()))
+		return true;
 
-void king::set_short_castle(bool sc) {
-	short_castle = sc;
-}
+	// left
+	next_pos = position(pos.first - 1, pos.second);
+	if(board[next_pos] == ((get_type() == WHITE) ? board.get_black().get_king() : board.get_white().get_king()))
+		return true;
 
-void king::set_long_castle(bool lc) {
-	long_castle = lc;
+	// right
+	next_pos = position(pos.first + 1, pos.second);
+	if(board[next_pos] == ((get_type() == WHITE) ? board.get_black().get_king() : board.get_white().get_king()))
+		return true;
+
+	// up left
+	next_pos = position(pos.first - 1, pos.second + 1);
+	if(board[next_pos] == ((get_type() == WHITE) ? board.get_black().get_king() : board.get_white().get_king()))
+		return true;
+
+	// up right
+	next_pos = position(pos.first + 1, pos.second + 1);
+	if(board[next_pos] == ((get_type() == WHITE) ? board.get_black().get_king() : board.get_white().get_king()))
+		return true;
+
+	// down left
+	next_pos = position(pos.first - 1, pos.second - 1);
+	if(board[next_pos] == ((get_type() == WHITE) ? board.get_black().get_king() : board.get_white().get_king()))
+		return true;
+
+	// down right
+	next_pos = position(pos.first + 1, pos.second - 1);
+	if(board[next_pos] == ((get_type() == WHITE) ? board.get_black().get_king() : board.get_white().get_king()))
+		return true;
+	return false;
 }

@@ -41,14 +41,16 @@ vector<move> pawn::get_possible_moves() {
 		case WHITE: {
 			// up
 			next_pos = position(pos.first, pos.second + 1);
-			if (board.is_valid_move(move(pos, next_pos))) {
+			if (board.is_valid_move(move(pos, next_pos))
+				&& board[next_pos] == nullptr) {
 				moves.emplace_back(pos, next_pos);
 			}
 
 			// double-up
 			if (pos.second == '2') {
 				next_pos = position(pos.first, pos.second + 2);
-				if (board.is_valid_move(move(pos, next_pos)))
+				if (board.is_valid_move(move(pos, next_pos))
+					&& board[next_pos] == nullptr)
 					moves.emplace_back(pos, next_pos);
 			}
 
@@ -86,14 +88,16 @@ vector<move> pawn::get_possible_moves() {
 		case BLACK: {
 			// down
 			next_pos = position(pos.first, pos.second - 1);
-			if (board.is_valid_move(move(pos, next_pos))) {
+			if (board.is_valid_move(move(pos, next_pos))
+				&& board[next_pos] == nullptr) {
 				moves.emplace_back(pos, next_pos);
 			}
 
 			// double-down
 			if (pos.second == '7') {
 				next_pos = position(pos.first, pos.second - 2);
-				if (board.is_valid_move(move(pos, next_pos)))
+				if (board.is_valid_move(move(pos, next_pos))
+					&& board[next_pos] == nullptr)
 					moves.emplace_back(pos, next_pos);
 			}
 
@@ -143,12 +147,26 @@ bool pawn::see_king() {
             // turn-right
             next_pos = position(pos.first + 1, pos.second + 1);
 
-			if (get_to_king(move(pos, next_pos))) return true;
+			//	If it can see a piece
+			if (board.is_in_bounds(next_pos)
+				&& board[next_pos] != nullptr
+				&& board[next_pos]->get_type() != get_type()) {
+//			If piece found is king
+				if (board[next_pos] == ((get_type() == WHITE) ? board.get_black().get_king() : board.get_white().get_king()))
+					return true;
+			}
 
             // turn-left
             next_pos = position(pos.first - 1, pos.second + 1);
 
-			if (get_to_king(move(pos, next_pos))) return true;
+			//	If it can see a piece
+			if (board.is_in_bounds(next_pos)
+				&& board[next_pos] != nullptr
+				&& board[next_pos]->get_type() != get_type()) {
+//			If piece found is king
+				if (board[next_pos] == ((get_type() == WHITE) ? board.get_black().get_king() : board.get_white().get_king()))
+					return true;
+			}
 
             break;
         }
@@ -156,13 +174,26 @@ bool pawn::see_king() {
             // turn-right
             next_pos = position(pos.first + 1, pos.second - 1);
 
-			bool temp = get_to_king(move(pos, next_pos));
-			if (temp) return true;
+			//	If it can see a piece
+			if (board.is_in_bounds(next_pos)
+				&& board[next_pos] != nullptr
+				&& board[next_pos]->get_type() != get_type()) {
+//			If piece found is king
+				if (board[next_pos] == ((get_type() == WHITE) ? board.get_black().get_king() : board.get_white().get_king()))
+					return true;
+			}
 
             // turn-left
             next_pos = position(pos.first - 1, pos.second - 1);
 
-			if (get_to_king(move(pos, next_pos))) return true;
+			//	If it can see a piece
+			if (board.is_in_bounds(next_pos)
+				&& board[next_pos] != nullptr
+				&& board[next_pos]->get_type() != get_type()) {
+//			If piece found is king
+				if (board[next_pos] == ((get_type() == WHITE) ? board.get_black().get_king() : board.get_white().get_king()))
+					return true;
+			}
 
             break;
         }

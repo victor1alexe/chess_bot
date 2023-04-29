@@ -8,10 +8,10 @@
 queen::queen(player_type type) : piece(type) {
 	switch (type) {
 		case WHITE:
-			set_default_position({'E', '1'});
+			set_default_position({'D', '1'});
 			break;
 		case BLACK:
-			set_default_position({'E', '8'});
+			set_default_position({'D', '8'});
 			break;
 	}
 }
@@ -40,8 +40,11 @@ vector<move> queen::get_possible_moves() {
 	// up
 	for (int i = 1; i <= 8 - pos.second; ++i) {
 		next_pos = position(pos.first, pos.second + i);
-		if (board.is_valid_move(move(pos, next_pos)))
+		if (board.is_valid_move(move(pos, next_pos))) {
 			moves.emplace_back(pos, next_pos);
+			if (board[next_pos] != nullptr)
+				break;
+		}
 		else
 			break;
 	}
@@ -49,8 +52,11 @@ vector<move> queen::get_possible_moves() {
 	// down
 	for (int i = 1; i <= pos.second - 1; ++i) {
 		next_pos = position(pos.first, pos.second - i);
-		if (board.is_valid_move(move(pos, next_pos)))
+		if (board.is_valid_move(move(pos, next_pos))) {
 			moves.emplace_back(pos, next_pos);
+			if (board[next_pos] != nullptr)
+				break;
+		}
 		else
 			break;
 	}
@@ -58,8 +64,11 @@ vector<move> queen::get_possible_moves() {
 	// left
 	for (int i = 1; i <= pos.first - 'A'; ++i) {
 		next_pos = position(pos.first - i, pos.second);
-		if (board.is_valid_move(move(pos, next_pos)))
+		if (board.is_valid_move(move(pos, next_pos))) {
 			moves.emplace_back(pos, next_pos);
+			if (board[next_pos] != nullptr)
+				break;
+		}
 		else
 			break;
 	}
@@ -67,8 +76,11 @@ vector<move> queen::get_possible_moves() {
 	// right
 	for (int i = 1; i <= 'H' - pos.first; ++i) {
 		next_pos = position(pos.first + i, pos.second);
-		if (board.is_valid_move(move(pos, next_pos)))
+		if (board.is_valid_move(move(pos, next_pos))) {
 			moves.emplace_back(pos, next_pos);
+			if (board[next_pos] != nullptr)
+				break;
+		}
 		else
 			break;
 	}
@@ -76,8 +88,11 @@ vector<move> queen::get_possible_moves() {
 	// up left
 	for (int i = 1; i < 8; i++) {
 		next_pos = position(pos.first - i, pos.second + i);
-		if (board.is_valid_move(move(pos, next_pos)))
+		if (board.is_valid_move(move(pos, next_pos))) {
 			moves.emplace_back(pos, next_pos);
+			if (board[next_pos] != nullptr)
+				break;
+		}
 		else
 			break;
 	}
@@ -85,8 +100,11 @@ vector<move> queen::get_possible_moves() {
 	// up right
 	for (int i = 1; i < 8; i++) {
 		next_pos = position(pos.first + i, pos.second + i);
-		if (board.is_valid_move(move(pos, next_pos)))
+		if (board.is_valid_move(move(pos, next_pos))) {
 			moves.emplace_back(pos, next_pos);
+			if (board[next_pos] != nullptr)
+				break;
+		}
 		else
 			break;
 	}
@@ -94,8 +112,11 @@ vector<move> queen::get_possible_moves() {
 	// down left
 	for (int i = 1; i < 8; i++) {
 		next_pos = position(pos.first - i, pos.second - i);
-		if (board.is_valid_move(move(pos, next_pos)))
+		if (board.is_valid_move(move(pos, next_pos))) {
 			moves.emplace_back(pos, next_pos);
+			if (board[next_pos] != nullptr)
+				break;
+		}
 		else
 			break;
 	}
@@ -103,8 +124,11 @@ vector<move> queen::get_possible_moves() {
 	// down right
 	for (int i = 1; i < 8; i++) {
 		next_pos = position (pos.first + i, pos.second - i);
-		if (board.is_valid_move(move(pos, next_pos)))
+		if (board.is_valid_move(move(pos, next_pos))) {
 			moves.emplace_back(pos, next_pos);
+			if (board[next_pos] != nullptr)
+				break;
+		}
 		else
 			break;
 	}
@@ -121,48 +145,112 @@ bool queen::see_king() {
 	// up
 	for (int i = 1; i <= 8 - pos.second; ++i) {
         next_pos = position(pos.first, pos.second + i);
-
-		if (get_to_king(move(pos, next_pos))) return true;
+		//	If it can see a piece
+		if (board.is_in_bounds(next_pos)
+			&& board[next_pos] != nullptr
+			&& board[next_pos]->get_type() != get_type()) {
+//			If piece found is king
+			if (board[next_pos] == ((get_type() == WHITE) ? board.get_black().get_king() : board.get_white().get_king()))
+				return true;
+			else break;
+		}
     }
 
 	// down
 	for (int i = 1; i <= pos.second - 1; ++i) {
         next_pos = position(pos.first, pos.second - i);
-
-        if (get_to_king(move(pos, next_pos))) return true;
+		//	If it can see a piece
+		if (board.is_in_bounds(next_pos)
+			&& board[next_pos] != nullptr
+			&& board[next_pos]->get_type() != get_type()) {
+//			If piece found is king
+			if (board[next_pos] == ((get_type() == WHITE) ? board.get_black().get_king() : board.get_white().get_king()))
+				return true;
+			else break;
+		}
     }
 
 	// left
 	for (int i = 1; i <= pos.first - 'A'; ++i) {
         next_pos = position(pos.first - i, pos.second);
-
-        if (get_to_king(move(pos, next_pos))) return true;
+		//	If it can see a piece
+		if (board.is_in_bounds(next_pos)
+			&& board[next_pos] != nullptr
+			&& board[next_pos]->get_type() != get_type()) {
+//			If piece found is king
+			if (board[next_pos] == ((get_type() == WHITE) ? board.get_black().get_king() : board.get_white().get_king()))
+				return true;
+			else break;
+		}
     }
 
 	// right
 	for (int i = 1; i <= 'H' - pos.first; ++i) {
         next_pos = position(pos.first + i, pos.second);
-
-        if (get_to_king(move(pos, next_pos))) return true;
+		//	If it can see a piece
+		if (board.is_in_bounds(next_pos)
+			&& board[next_pos] != nullptr
+			&& board[next_pos]->get_type() != get_type()) {
+//			If piece found is king
+			if (board[next_pos] == ((get_type() == WHITE) ? board.get_black().get_king() : board.get_white().get_king()))
+				return true;
+			else break;
+		}
     }
 
 	// diagonals
 	for (int i = 1; i < 8; i++) {
-        // up left
-        next_pos = position(pos.first - i, pos.second + i);
-        if (get_to_king(move(pos, next_pos))) return true;
+		// up left
+		next_pos = position(pos.first - i, pos.second + i);
+		//	If it can see a piece
+		if (board.is_in_bounds(next_pos)
+			&& board[next_pos] != nullptr
+			&& board[next_pos]->get_type() != get_type()) {
+//			If piece found is king
+			if (board[next_pos] == ((get_type() == WHITE) ? board.get_black().get_king() : board.get_white().get_king()))
+				return true;
+			else break;
+		}
+	}
 
-        // up right
-        next_pos = position(pos.first + i, pos.second + i);
-        if (get_to_king(move(pos, next_pos))) return true;
-
-        // down left
-        next_pos = position(pos.first - i, pos.second - i);
-        if (get_to_king(move(pos, next_pos))) return true;
-
+	for (int i = 1; i < 8; i++) {
+		// up right
+		next_pos = position(pos.first + i, pos.second + i);
+		//	If it can see a piece
+		if (board.is_in_bounds(next_pos)
+			&& board[next_pos] != nullptr
+			&& board[next_pos]->get_type() != get_type()) {
+//			If piece found is king
+			if (board[next_pos] == ((get_type() == WHITE) ? board.get_black().get_king() : board.get_white().get_king()))
+				return true;
+			else break;
+		}
+	}
+	for (int i = 1; i < 8; i++) {
+		// down left
+		next_pos = position(pos.first - i, pos.second - i);
+		//	If it can see a piece
+		if (board.is_in_bounds(next_pos)
+			&& board[next_pos] != nullptr
+			&& board[next_pos]->get_type() != get_type()) {
+//			If piece found is king
+			if (board[next_pos] == ((get_type() == WHITE) ? board.get_black().get_king() : board.get_white().get_king()))
+				return true;
+			else break;
+		}
+	}
+	for (int i = 1; i < 8; i++) {
         // down right
         next_pos = position (pos.first + i, pos.second - i);
-        if (get_to_king(move(pos, next_pos))) return true;
+		//	If it can see a piece
+		if (board.is_in_bounds(next_pos)
+			&& board[next_pos] != nullptr
+			&& board[next_pos]->get_type() != get_type()) {
+//			If piece found is king
+			if (board[next_pos] == ((get_type() == WHITE) ? board.get_black().get_king() : board.get_white().get_king()))
+				return true;
+			else break;
+		}
     }
 	return false;
 }

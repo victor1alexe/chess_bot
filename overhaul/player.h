@@ -17,6 +17,9 @@ private:
 	vector<piece*> pieces_in_hand;
 	bool in_check;
 	piece* my_king;
+
+	bool long_castle;
+	bool short_castle;
 public:
 	player() = default;
 	player(player_type type);
@@ -38,6 +41,9 @@ public:
 	auto end() -> decltype(pieces_on_board.end());
 	piece* operator[](int index);
 	vector<move> get_possible_moves() const;
+
+	bool can_short_castle() const;
+	bool can_long_castle() const;
 };
 
 #endif //CRAZYHOUSE_PLAYER_H

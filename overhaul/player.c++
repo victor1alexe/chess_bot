@@ -37,6 +37,14 @@ void player::place_piece(piece *p) {
 	pieces_in_hand.erase(std::remove(pieces_in_hand.begin(), pieces_in_hand.end(), p), pieces_in_hand.end());
 }
 
+bool player::can_long_castle() const {
+	return long_castle;
+}
+
+bool player::can_short_castle() const {
+	return short_castle;
+}
+
 void player::init_pieces() {
 	my_king = new king(type);
 	pieces_on_board.push_back(my_king);
