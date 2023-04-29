@@ -17,6 +17,7 @@ board& board::get_instance() {
 
 board::board() : white(WHITE), black(BLACK), _backup(nullptr) {
 	reset();
+    reset_moves_since_last_capture();
 }
 
 position board::get_position(piece *piece) {
@@ -179,6 +180,49 @@ bool board::would_be_check(move m) {
 			break;
 		}
 	}
+
+    // Check for knights
+
+    p = position(king_pos.first + 1, king_pos.second + 2);
+    if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
+        pieces.push_back(b[p]);
+    }
+
+    p = position(king_pos.first + 1, king_pos.second - 2);
+    if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
+        pieces.push_back(b[p]);
+    }
+
+    p = position(king_pos.first - 1, king_pos.second + 2);
+    if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
+        pieces.push_back(b[p]);
+    }
+
+    p = position(king_pos.first - 1, king_pos.second - 2);
+    if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
+        pieces.push_back(b[p]);
+    }
+
+    p = position(king_pos.first + 2, king_pos.second + 1);
+    if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
+        pieces.push_back(b[p]);
+    }
+
+    p = position(king_pos.first + 2, king_pos.second - 1);
+    if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
+        pieces.push_back(b[p]);
+    }
+
+    p = position(king_pos.first - 2, king_pos.second + 1);
+    if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
+        pieces.push_back(b[p]);
+    }
+
+    p = position(king_pos.first - 2, king_pos.second - 1);
+    if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
+        pieces.push_back(b[p]);
+    }
+
 
 	std::for_each(pieces.begin(), pieces.end(), [&](piece* p) {
 		if (p->see_king()) {
@@ -350,6 +394,7 @@ void board::make_move(move m) {
 
 			pieces[to] = attacker;
 			positions[attacker] = to;
+            reset_moves_since_last_capture();
 			break;
 
 		case PROMOTION:
@@ -360,11 +405,14 @@ void board::make_move(move m) {
 			// TODO: CASTLE
 
 			if (captured != nullptr) {
+                reset_moves_since_last_capture();
 				me.capture_piece(captured);
 				him.remove_piece(captured);
 				pieces.erase(to);
 				positions.erase(captured);
-			}
+			} else {
+                increment_moves_since_last_capture();
+            }
 			pieces.erase(from);
 			positions.erase(attacker);
 
@@ -409,3 +457,16 @@ void board::restore() {
 	white = _backup->white_cp;
 	black = _backup->black_cp;
 }
+
+int board::get_moves_since_last_capture() const {
+    return moves_since_last_capture;
+}
+
+void board::increment_moves_since_last_capture() {
+    moves_since_last_capture++;
+}
+
+void board::reset_moves_since_last_capture() {
+    moves_since_last_capture = 0;
+}
+

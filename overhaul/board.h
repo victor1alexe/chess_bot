@@ -27,6 +27,7 @@ private:
 	map<position, piece*> pieces;
 	map<piece*, position> positions;
 	stack<move> moves;
+    int moves_since_last_capture;
 	player white;
 	player black;
 	backup* _backup;
@@ -58,6 +59,10 @@ public:
 
 	void make_backup();
 	void restore();
+
+    int get_moves_since_last_capture() const;
+    void increment_moves_since_last_capture();
+    void reset_moves_since_last_capture();
 
 	bool is_castle_possible(player_type p_t, side s);
 };

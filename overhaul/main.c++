@@ -18,6 +18,12 @@ int main() {
 	debug::print_board();
 
 	for (int i = 0; i < 10000; i++) {
+        if (b.get_moves_since_last_capture() >= 50) {
+            cout << "Draw!"
+                 << endl;
+            break;
+        }
+
 		vector<move> moves = b.get_white().get_possible_moves();
 
 		if (moves.empty() && b.get_white().is_in_check()) {
