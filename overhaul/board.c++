@@ -4,10 +4,17 @@
 
 #include <iostream>
 #include "pieces/king.h"
+#include "pieces/queen.h"
+#include "pieces/pawn.h"
 #include "board.h"
 
 using std::cout, std::endl;
 using position = pair<char, char>;
+
+template<typename Base, typename T>
+inline bool instanceof(const T *ptr) {
+    return dynamic_cast<const Base *>(ptr) != nullptr;
+}
 
 board *board::instance = new board();
 
@@ -418,6 +425,26 @@ void board::make_move(move m) {
 
 			pieces[to] = attacker;
 			positions[attacker] = to;
+
+            // check if pawn is on last line to promote
+            if (attacker->get_type() == WHITE && to.second == '8' && instanceof<pawn>(attacker)) {
+                me.remove_piece(attacker);
+                pieces.erase(to);
+                positions.erase(attacker);
+                attacker = new queen(WHITE);
+                me.add_piece(attacker);
+                pieces[to] = attacker;
+                positions[attacker] = to;
+            } else if (attacker->get_type() == BLACK && to.second == '1' && instanceof<pawn>(attacker)) {
+                me.remove_piece(attacker);
+                pieces.erase(to);
+                positions.erase(attacker);
+                attacker = new queen(BLACK);
+                me.add_piece(attacker);
+                pieces[to] = attacker;
+                positions[attacker] = to;
+            }
+
 			break;
 	}
 

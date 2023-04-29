@@ -35,8 +35,9 @@ int main() {
 				 << endl;
 			break;
 		}
-
-		b.make_move(moves[rand() % moves.size()]);
+        move mv = moves[rand() % moves.size()];
+        //cout << "About to move:" << mv.to_string() << endl;
+		b.make_move(mv);
 		debug::print_last_move();
 
 		debug::print_board();
@@ -53,8 +54,9 @@ int main() {
 				 << endl;
 			break;
 		}
-
-		b.make_move(moves[rand() % moves.size()]);
+        mv = moves[rand() % moves.size()];
+        //cout << "About to move:" << mv.to_string() << endl;
+		b.make_move(mv);
 		debug::print_last_move();
 
 		debug::print_board();
