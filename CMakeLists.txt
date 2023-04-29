@@ -16,4 +16,5 @@ add_executable(CrazyHouse
         overhaul/pieces/queen.c++
         overhaul/pieces/king.c++
         overhaul/debug/debug.c++
-        )
+        overhaul/protocol/protocol.h overhaul/protocol/protocol.cpp)
+

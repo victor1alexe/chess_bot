@@ -16,13 +16,17 @@ position piece::get_default_position() {
 	return default_position;
 }
 
-piece::piece(player_type type) {
+piece::piece(player_type type) : promoted(false) {
 	this->type = type;
 	default_position = OUT;
 }
 
 player_type piece::get_type() {
 	return type;
+}
+
+void piece::set_type(player_type type) {
+    this->type = type;
 }
 
 string piece::to_string(style style) {
@@ -52,3 +56,7 @@ bool piece::get_to_king(move m) {
 }
 
 bool piece::see_king() { return false; }
+
+bool piece::is_promoted() { return promoted; }
+
+void piece::set_promotion(bool promotion) { promoted = promotion; }

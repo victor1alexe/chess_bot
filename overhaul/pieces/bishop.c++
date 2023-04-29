@@ -30,6 +30,8 @@ bishop::bishop(player_type type, side side) : piece(type) {
 	}
 }
 
+bishop::bishop(player_type type) : piece(type) {}
+
 string bishop::to_string(style style) {
 	switch (style) {
 		case BOT:

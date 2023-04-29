@@ -22,9 +22,25 @@ board& board::get_instance() {
 	return *instance;
 }
 
+player_type board::get_current_player() const {
+    return current_player;
+}
+
+void board::set_current_player(player_type p_t) {
+    current_player = p_t;
+}
+
 board::board() : white(WHITE), black(BLACK), _backup(nullptr) {
 	reset();
     reset_moves_since_last_capture();
+}
+
+void board::set_powered_on(bool powered_on) {
+    this->powered_on = powered_on;
+}
+
+bool board::is_powered_on() const {
+    return powered_on;
 }
 
 position board::get_position(piece *piece) {
@@ -80,8 +96,13 @@ void board::reset() {
 	pieces = map<position, piece*>();
 	positions = map<piece*, position>();
 
+    white = player(WHITE);
+    black = player(BLACK);
+
 	white.init_pieces();
 	black.init_pieces();
+
+    set_powered_on(false);
 
 	for (auto& piece : white) {
 		pieces[piece->get_default_position()] = piece;
@@ -278,7 +299,7 @@ bool board::is_castle_possible(player_type p_t, side s) {
 						piece* queen = (*this)[{'D', '1'}];
 						piece* bishop = (*this)[{'C', '1'}];
 						piece* knight = (*this)[{'B', '1'}];
-						if (queen != nullptr && bishop != nullptr && knight != nullptr) return false;
+						if (queen != nullptr || bishop != nullptr || knight != nullptr) return false;
 						make_backup();
 						if (would_be_check(move("E1D1"))) {
 							restore();
@@ -297,7 +318,7 @@ bool board::is_castle_possible(player_type p_t, side s) {
 					if (p.can_short_castle()) {
 						piece* bishop = (*this)[{'F', '1'}];
 						piece* knight = (*this)[{'G', '1'}];
-						if (bishop != nullptr && knight != nullptr) return false;
+						if (bishop != nullptr || knight != nullptr) return false;
 						make_backup();
 						if (would_be_check(move("E1F1"))) {
 							restore();
@@ -324,7 +345,7 @@ bool board::is_castle_possible(player_type p_t, side s) {
 						piece* queen = (*this)[{'D', '8'}];
 						piece* bishop = (*this)[{'C', '8'}];
 						piece* knight = (*this)[{'B', '8'}];
-						if (queen != nullptr && bishop != nullptr && knight != nullptr) return false;
+						if (queen != nullptr || bishop != nullptr || knight != nullptr) return false;
 						make_backup();
 						if (would_be_check(move("E8D8"))) {
 							restore();
@@ -343,7 +364,7 @@ bool board::is_castle_possible(player_type p_t, side s) {
 					if (p.can_short_castle()) {
 						piece* bishop = (*this)[{'F', '8'}];
 						piece* knight = (*this)[{'G', '8'}];
-						if (bishop != nullptr && knight != nullptr) return false;
+						if (bishop != nullptr || knight != nullptr) return false;
 						make_backup();
 						if (would_be_check(move("E8F8"))) {
 							restore();
@@ -373,17 +394,53 @@ void board::make_move(move m) {
 	const position to = m.get_to();
 	const position from = m.get_from();
 
+
+
 	piece* attacker = get_piece(from);;
 	piece* captured = nullptr;
 
 	player& me = attacker->get_type() == WHITE ? white : black;
 	player& him = attacker->get_type() == WHITE ? black : white;
 
+    if (from.first == 'E' && (from.second == '1' || from.second == '8')) {
+        me.set_short_castle(false);
+        me.set_long_castle(false);
+    }
+
+    if (from.first == 'H' && (from.second == '1' || from.second == '8')) {
+        me.set_short_castle(false);
+    }
+
+    if (from.first == 'A' && (from.second == '1' || from.second == '8')) {
+        me.set_long_castle(false);
+    }
+
 	switch (m.get_special()) {
 		case SHORT_CASTLE:
-//			TODO: Implement castling
+            if (attacker->get_type() == WHITE) {
+                make_move(move("H1F1"));
+                make_move(move("E1G1"));
+                me.set_short_castle(false);
+                me.set_long_castle(false);
+            } else {
+                make_move(move("H8F8"));
+                make_move(move("E8G8"));
+                me.set_short_castle(false);
+                me.set_long_castle(false);
+            }
 			break;
 		case LONG_CASTLE:
+            if (attacker->get_type() == WHITE) {
+                make_move(move("A1D1"));
+                make_move(move("E1C1"));
+                me.set_short_castle(false);
+                me.set_long_castle(false);
+            } else {
+                make_move(move("A8D8"));
+                make_move(move("E8C8"));
+                me.set_short_castle(false);
+                me.set_long_castle(false);
+            }
 			break;
 		case EN_PASSANT:
 			if (me.get_type() == WHITE)
@@ -409,8 +466,6 @@ void board::make_move(move m) {
 		default:
 			captured = get_piece(to);
 
-			// TODO: CASTLE
-
 			if (captured != nullptr) {
                 reset_moves_since_last_capture();
 				me.capture_piece(captured);
@@ -426,25 +481,28 @@ void board::make_move(move m) {
 			pieces[to] = attacker;
 			positions[attacker] = to;
 
-            // check if pawn is on last line to promote
+            // check if white pawn is on last line to promote
             if (attacker->get_type() == WHITE && to.second == '8' && instanceof<pawn>(attacker)) {
+                cout << "Promotion WHITE" << endl;
                 me.remove_piece(attacker);
                 pieces.erase(to);
                 positions.erase(attacker);
                 attacker = new queen(WHITE);
+                attacker->set_promotion(true);
                 me.add_piece(attacker);
                 pieces[to] = attacker;
                 positions[attacker] = to;
             } else if (attacker->get_type() == BLACK && to.second == '1' && instanceof<pawn>(attacker)) {
+                cout << "Promotion BLACK" << endl;
                 me.remove_piece(attacker);
                 pieces.erase(to);
                 positions.erase(attacker);
                 attacker = new queen(BLACK);
+                attacker->set_promotion(true);
                 me.add_piece(attacker);
                 pieces[to] = attacker;
                 positions[attacker] = to;
             }
-
 			break;
 	}
 
@@ -496,4 +554,3 @@ void board::increment_moves_since_last_capture() {
 void board::reset_moves_since_last_capture() {
     moves_since_last_capture = 0;
 }
-

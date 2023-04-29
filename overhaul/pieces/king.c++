@@ -78,7 +78,12 @@ vector<move> king::get_possible_moves() {
 		moves.emplace_back(pos, next_pos);
 
 	// castling long
-	// TODO: castling
+	if (board.is_castle_possible(get_type(), QUEEN))
+        moves.emplace_back(get_type() == WHITE ? move::LONG_CASTLE_WHITE : move::LONG_CASTLE_BLACK);
+
+    // castling short
+    if (board.is_castle_possible(get_type(), KING))
+        moves.emplace_back(get_type() == WHITE ? move::SHORT_CASTLE_WHITE : move::SHORT_CASTLE_BLACK);
 
 	return moves;
 }

@@ -30,6 +30,8 @@ rook::rook(player_type type, side side) : piece(type) {
 	}
 }
 
+rook::rook(player_type type) :piece(type) {}
+
 string rook::to_string(style style) {
 	switch (style) {
 		case BOT:
@@ -52,7 +54,7 @@ vector<move> rook::get_possible_moves() {
 	position next_pos;
 
 	// up
-	for (int i = 1; i <= 8 - pos.second; ++i) {
+	for (int i = 1; i < 8; ++i) {
 		next_pos = position(pos.first, pos.second + i);
 		if (board.is_valid_move(move(pos, next_pos))) {
 			moves.emplace_back(pos, next_pos);
@@ -64,7 +66,7 @@ vector<move> rook::get_possible_moves() {
 	}
 
 	// down
-	for (int i = 1; i <= pos.second - 1; ++i) {
+	for (int i = 1; i < 8; ++i) {
 		next_pos = position(pos.first, pos.second - i);
 		if (board.is_valid_move(move(pos, next_pos))) {
 			moves.emplace_back(pos, next_pos);
@@ -76,7 +78,7 @@ vector<move> rook::get_possible_moves() {
 	}
 
 	// left
-	for (int i = 1; i <= pos.first - 'A'; ++i) {
+	for (int i = 1; i < 'A'; ++i) {
 		next_pos = position(pos.first - i, pos.second);
 		if (board.is_valid_move(move(pos, next_pos))) {
 			moves.emplace_back(pos, next_pos);
@@ -88,7 +90,7 @@ vector<move> rook::get_possible_moves() {
 	}
 
 	// right
-	for (int i = 1; i <= 'H' - pos.first; ++i) {
+	for (int i = 1; i <= 'H'; ++i) {
 		next_pos = position(pos.first + i, pos.second);
 		if (board.is_valid_move(move(pos, next_pos))) {
 			moves.emplace_back(pos, next_pos);

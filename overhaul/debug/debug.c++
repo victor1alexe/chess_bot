@@ -30,24 +30,44 @@ void debug::print_board() {
 void debug::print_last_move() {
 	board& board = board::get_instance();
 	const move &m = board.get_last_move();
-	piece* p = board[m.get_to()];
+    switch (m.get_special()) {
 
-	cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
-	switch (p->get_type()) {
-	case WHITE:
-		cout << "White moved ";
-		break;
+        case LONG_CASTLE: {
+            cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+            cout << "Castled long." << endl;
+            cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl
+                 << endl;
+            break;
+        }
+        case SHORT_CASTLE: {
+            cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+            cout << "Castled short." << endl;
+            cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl
+                 << endl;
+            break;
+        }
+        default: {
+            piece *p = board[m.get_to()];
 
-	case BLACK:
-		cout << "Black moved ";
-		break;
-	}
+            cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+            switch (p->get_type()) {
+                case WHITE:
+                    cout << "White moved ";
+                    break;
 
-	cout << p->to_string(DEBUG)
-		<< " (" << to_string(p->get_default_position()) << ")"
-		<< " from " << to_string(m.get_from())
-		<< " to " << to_string(m.get_to()) << endl;
-	cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl << endl;
+                case BLACK:
+                    cout << "Black moved ";
+                    break;
+            }
+
+            cout << p->to_string(DEBUG)
+                 << " (" << to_string(p->get_default_position()) << ")"
+                 << " from " << to_string(m.get_from())
+                 << " to " << to_string(m.get_to()) << endl;
+            cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl
+                 << endl;
+        }
+    }
 }
 
 void debug::print_possible_moves(piece *p) {

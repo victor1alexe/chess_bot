@@ -143,7 +143,7 @@ bool queen::see_king() {
 	position next_pos;
 
 	// up
-	for (int i = 1; i <= 8 - pos.second; ++i) {
+	for (int i = 1; i < 8; ++i) {
         next_pos = position(pos.first, pos.second + i);
 		//	If it can see a piece
 		if (board.is_in_bounds(next_pos)
@@ -157,7 +157,7 @@ bool queen::see_king() {
     }
 
 	// down
-	for (int i = 1; i <= pos.second - 1; ++i) {
+	for (int i = 1; i < 8; ++i) {
         next_pos = position(pos.first, pos.second - i);
 		//	If it can see a piece
 		if (board.is_in_bounds(next_pos)
@@ -171,7 +171,7 @@ bool queen::see_king() {
     }
 
 	// left
-	for (int i = 1; i <= pos.first - 'A'; ++i) {
+	for (int i = 1; i <'A'; ++i) {
         next_pos = position(pos.first - i, pos.second);
 		//	If it can see a piece
 		if (board.is_in_bounds(next_pos)
@@ -185,7 +185,7 @@ bool queen::see_king() {
     }
 
 	// right
-	for (int i = 1; i <= 'H' - pos.first; ++i) {
+	for (int i = 1; i < 'H'; ++i) {
         next_pos = position(pos.first + i, pos.second);
 		//	If it can see a piece
 		if (board.is_in_bounds(next_pos)

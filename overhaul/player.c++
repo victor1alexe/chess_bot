@@ -10,11 +10,13 @@
 #include "pieces/bishop.h"
 #include "pieces/knight.h"
 #include "pieces/pawn.h"
+#include <iostream>
 
-player::player(player_type type) : type(type) {
+using std::cout, std::endl;
+
+player::player(player_type type) : type(type), in_check(false), long_castle(true), short_castle(true) {
 	pieces_on_board = {};
 	pieces_in_hand = {};
-	in_check = false;
 }
 
 player_type player::get_type() {
@@ -25,8 +27,20 @@ void player::add_piece(piece *p) {
 	pieces_on_board.push_back(p);
 }
 
+void player::set_short_castle(bool short_castle) {
+    player::short_castle = short_castle;
+}
+
+void player::set_long_castle(bool long_castle) {
+    player::long_castle = long_castle;
+}
+
 void player::capture_piece(piece *p) {
-	pieces_in_hand.push_back(p);
+    if (p->is_promoted()) {
+        p = new pawn(p->get_type(), 'A');
+    }
+//     p->set_type(type);
+    pieces_in_hand.push_back(p);
 }
 
 void player::remove_piece(piece *p) {
@@ -58,6 +72,10 @@ void player::init_pieces() {
 	for (char i = 'A'; i <= 'H'; i++) {
 		pieces_on_board.push_back(new pawn(type, i));
 	}
+}
+
+vector<piece*> player::get_pieces_in_hand() const {
+    return pieces_in_hand;
 }
 
 void player::set_in_check(bool in_check) {

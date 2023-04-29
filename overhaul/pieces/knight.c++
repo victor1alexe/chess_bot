@@ -31,6 +31,8 @@ knight::knight(player_type type, side side) : piece(type) {
 	}
 }
 
+knight::knight(player_type type) : piece(type) {}
+
 string knight::to_string(style style) {
 	switch (style) {
 		case BOT:

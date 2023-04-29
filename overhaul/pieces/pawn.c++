@@ -5,8 +5,13 @@
 #include "../board.h"
 #include "pawn.h"
 
+template<typename Base, typename T>
+inline bool instanceof(const T *ptr) {
+    return dynamic_cast<const Base *>(ptr) != nullptr;
+}
+
 pawn::pawn(player_type type, char file) : piece(type), file(file) {
-	switch (type) {
+    switch (type) {
 		case WHITE:
 			set_default_position({file, '2'});
 			break;
@@ -50,7 +55,8 @@ vector<move> pawn::get_possible_moves() {
 			if (pos.second == '2') {
 				next_pos = position(pos.first, pos.second + 2);
 				if (board.is_valid_move(move(pos, next_pos))
-					&& board[next_pos] == nullptr)
+					&& board[position(pos.first, pos.second + 1)] == nullptr
+                    && board[next_pos] == nullptr)
 					moves.emplace_back(pos, next_pos);
 			}
 
@@ -77,7 +83,8 @@ vector<move> pawn::get_possible_moves() {
 			if (last_move == move::START) break;
 			if (last_move.get_from().second == '7' &&
                 last_move.get_to().second == '5' &&
-                last_move.get_to().second == pos.second) {
+                last_move.get_to().second == pos.second &&
+                instanceof<pawn>(board[last_move.get_to()])) {
 				if (last_move.get_to().first == pos.first + 1)
 					moves.emplace_back(pos, position(pos.first + 1, '6'));
 				if (last_move.get_to().first == pos.first - 1)
@@ -97,7 +104,8 @@ vector<move> pawn::get_possible_moves() {
 			if (pos.second == '7') {
 				next_pos = position(pos.first, pos.second - 2);
 				if (board.is_valid_move(move(pos, next_pos))
-					&& board[next_pos] == nullptr)
+					&& board[position(pos.first, pos.second - 1)] == nullptr
+                    && board[next_pos] == nullptr)
 					moves.emplace_back(pos, next_pos);
 			}
 
@@ -123,7 +131,8 @@ vector<move> pawn::get_possible_moves() {
 			move last_move = board.get_last_move();
 			if (last_move.get_from().second == '2' &&
                 last_move.get_to().second == '4' &&
-                last_move.get_to().second == pos.second) {
+                last_move.get_to().second == pos.second &&
+                instanceof<pawn>(board[last_move.get_to()])){
                 if (last_move.get_to().first == pos.first + 1)
                     moves.emplace_back(pos, position(pos.first + 1, '3'));
                 if (last_move.get_to().first == pos.first - 1)

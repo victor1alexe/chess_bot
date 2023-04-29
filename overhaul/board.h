@@ -11,6 +11,7 @@
 
 using std::map, std::stack;
 
+
 struct backup {
 	map<position, piece*> pieces_cp;
 	map<piece*, position> positions_cp;
@@ -30,6 +31,8 @@ private:
     int moves_since_last_capture;
 	player white;
 	player black;
+    player_type current_player;
+    bool powered_on;
 	backup* _backup;
 	board();
 public:
@@ -39,9 +42,14 @@ public:
 	piece* get_piece(position position);
 	map<position, piece*> get_pieces();
 	map<piece*, position> get_positions();
+    void set_powered_on(bool powered_on);
+    bool is_powered_on() const;
 	stack<move> get_moves();
 	void display() const;
 	void reset();
+
+    player_type get_current_player() const;
+    void set_current_player(player_type p_t);
 
 	position& operator[](piece* piece);
 	piece* operator[](position position);

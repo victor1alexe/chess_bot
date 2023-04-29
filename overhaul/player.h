@@ -31,6 +31,11 @@ public:
 	void remove_piece(piece* p);
 	void place_piece(piece* p);
 
+    void set_long_castle(bool long_castle);
+    void set_short_castle(bool short_castle);
+
+    vector<piece*> get_pieces_in_hand() const;
+
 	piece* get_king() const;
 
 	void set_in_check(bool in_check);
