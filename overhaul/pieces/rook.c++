@@ -90,7 +90,7 @@ vector<move> rook::get_possible_moves() {
 	}
 
 	// right
-	for (int i = 1; i <= 'H'; ++i) {
+	for (int i = 1; i < 'H'; ++i) {
 		next_pos = position(pos.first + i, pos.second);
 		if (board.is_valid_move(move(pos, next_pos))) {
 			moves.emplace_back(pos, next_pos);
