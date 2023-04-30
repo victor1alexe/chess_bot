@@ -74,13 +74,13 @@ void protocol::handleMoveCommand(const string& command) {
 
 // 	Get the move from the command
     string string_move = command.substr(9);
-    if (instanceof<king>(b[{'e', '1'}])) {
+    if (instanceof<king>(b[{'E', '1'}])) {
         if (string_move == "e1g1") {
             b.make_move(move::SHORT_CASTLE_WHITE);
         } else if (string_move == "e1c1") {
             b.make_move(move::LONG_CASTLE_WHITE);
         }
-    } else if (instanceof<king>(b[{'e', '8'}])) {
+    } else if (instanceof<king>(b[{'E', '8'}])) {
         if (string_move == "e8g8") {
             b.make_move(move::SHORT_CASTLE_BLACK);
         } else if (string_move == "e8c8") {
