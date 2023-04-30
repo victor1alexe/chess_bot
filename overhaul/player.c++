@@ -3,6 +3,7 @@
 //
 
 #include "player.h"
+#include "board.h"
 #include "piece.h"
 #include "pieces/king.h"
 #include "pieces/queen.h"
@@ -14,9 +15,18 @@
 
 using std::cout, std::endl;
 
+template<typename Base, typename T>
+inline bool instanceof(const T *ptr) {
+    return dynamic_cast<const Base *>(ptr) != nullptr;
+}
+
 player::player(player_type type) : type(type), in_check(false), long_castle(true), short_castle(true) {
 	pieces_on_board = {};
-	pieces_in_hand = {};
+	queens_in_hand = 0;
+    rooks_in_hand = 0;
+    knights_in_hand = 0;
+    bishops_in_hand = 0;
+    pawns_in_hand = 0;
 }
 
 player_type player::get_type() {
@@ -36,19 +46,33 @@ void player::set_long_castle(bool long_castle) {
 }
 
 void player::capture_piece(piece *p) {
-    if (p->is_promoted()) {
-        p = new pawn(p->get_type(), 'A');
-    }
-//     p->set_type(type);
-    pieces_in_hand.push_back(p);
+    if (p->is_promoted() || instanceof<pawn>(p))
+        pawns_in_hand++;
+    else if (instanceof<rook>(p))
+        rooks_in_hand++;
+    else if (instanceof<queen>(p))
+        queens_in_hand++;
+    else if (instanceof<knight>(p))
+        knights_in_hand++;
+    else if (instanceof<bishop>(p))
+        bishops_in_hand++;
 }
 
 void player::remove_piece(piece *p) {
 	pieces_on_board.erase(std::remove(pieces_on_board.begin(), pieces_on_board.end(), p), pieces_on_board.end());
 }
 
-void player::place_piece(piece *p) {
-	pieces_in_hand.erase(std::remove(pieces_in_hand.begin(), pieces_in_hand.end(), p), pieces_in_hand.end());
+void player::place_piece(piece* p) {
+    if (instanceof<rook>(p))
+        rooks_in_hand--;
+    else if (instanceof<queen>(p))
+        queens_in_hand--;
+    else if (instanceof<knight>(p))
+        knights_in_hand--;
+    else if (instanceof<bishop>(p))
+        bishops_in_hand--;
+    else if (instanceof<pawn>(p))
+        pawns_in_hand--;
 }
 
 bool player::can_long_castle() const {
@@ -74,9 +98,6 @@ void player::init_pieces() {
 	}
 }
 
-vector<piece*> player::get_pieces_in_hand() const {
-    return pieces_in_hand;
-}
 
 void player::set_in_check(bool in_check) {
 	this->in_check = in_check;
@@ -94,6 +115,67 @@ vector<move> player::get_possible_moves() const {
 	}
 	return moves;
 }
+
+vector<move> player::get_possible_drops() {
+    vector<move> moves = {};
+    board& b = board::get_instance();
+    vector<position> possible_places = {};
+    for (int i = 1; i <= 8; i++) {
+        for (char j = 'A'; j <= 'H'; j++) {
+            if (b[position(j, i)] == nullptr) {
+                possible_places.emplace_back(j, i);
+            }
+        }
+    }
+    if (pawns_in_hand != 0) {
+        for (auto pos : possible_places) {
+            if (pos.second != 8 && pos.second != 1) {
+                move m = move({'P', '@'}, pos, get_type() == WHITE ? DROP_WHITE : DROP_BLACK);
+                if (!b.would_be_check(m)) {
+                    moves.emplace_back(m);
+                }
+            }
+        }
+    }
+    if (rooks_in_hand != 0) {
+        for (auto pos : possible_places) {
+            move m = move({'R', '@'}, pos, get_type() == WHITE ? DROP_WHITE : DROP_BLACK);
+            if (!b.would_be_check(m)) {
+                moves.emplace_back(m);
+            }
+        }
+    }
+    if (knights_in_hand != 0) {
+        for (auto pos : possible_places) {
+            move m = move({'K', '@'}, pos, get_type() == WHITE ? DROP_WHITE : DROP_BLACK);
+            if (!b.would_be_check(m)) {
+                moves.emplace_back(m);
+            }
+        }
+    }
+    if (bishops_in_hand != 0) {
+        for (auto pos : possible_places) {
+            move m = move({'B', '@'}, pos, get_type() == WHITE ? DROP_WHITE : DROP_BLACK);
+            if (!b.would_be_check(m)) {
+                moves.emplace_back(m);
+            }
+        }
+    }
+    if (queens_in_hand != 0) {
+        for (auto pos : possible_places) {
+            move m = move({'Q', '@'}, pos, get_type() == WHITE ? DROP_WHITE : DROP_BLACK);
+            if (!b.would_be_check(m)) {
+                moves.emplace_back(m);
+            }
+        }
+    }
+    return moves;
+}
+
+
+
+
+
 
 auto player::begin() -> decltype(pieces_on_board.begin()) {
 	return pieces_on_board.begin();

@@ -48,7 +48,7 @@ static std::string constructFeaturesPayload() {
             << " ping=0"
             << " setboard=0"
             << " level=0"
-            << " variants=\"normal\""
+            << " variants=\"crazyhouse\""
             << " name=\"" << "CrazyHouse" << "\" myname=\""
             << "CrazyHouse" << "\" done=1\n";
     return payload.str();
@@ -78,6 +78,14 @@ void protocol::handleMoveCommand(const string& command) {
     // 	Get the move from the command
     string string_move = command.substr(9);
     move m = move(command.substr(9));
+
+    // check if move is a drop
+    if (m.get_from().second == '@') {
+        b.make_move(move(m.get_from(), m.get_to(), b.get_current_player() == WHITE ? DROP_BLACK : DROP_WHITE));
+
+        made_move = true;
+    }
+
     if (instanceof<king>(b[{'E', '1'}])) {
         if (string_move == "e1g1") {
             b.make_move(move::SHORT_CASTLE_WHITE);
@@ -114,13 +122,16 @@ void protocol::handleMoveCommand(const string& command) {
     }
 
 
-    debug::print_board();
+    //debug::print_board();
 
 // 	Send the best move to the GUI
     if (b.is_powered_on()){
         srand(time(nullptr));
         if (b.get_current_player() == WHITE) {
             vector<move> moves = b.get_white().get_possible_moves();
+            vector<move> drops = b.get_white().get_possible_drops();
+            moves.insert(moves.end(), drops.begin(), drops.end());
+
             if (moves.empty() && !b.get_white().is_in_check()) {
                 cout << "1/2-1/2 {Stalemate}" << endl;
                 return;
@@ -139,6 +150,8 @@ void protocol::handleMoveCommand(const string& command) {
 
         } else {
             vector<move> moves = b.get_black().get_possible_moves();
+            vector<move> drops = b.get_black().get_possible_drops();
+            moves.insert(moves.end(), drops.begin(), drops.end());
 
             if (moves.empty() && !b.get_black().is_in_check()) {
                 cout << "1/2-1/2 {Stalemate}" << endl;

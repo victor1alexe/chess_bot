@@ -58,8 +58,8 @@ public:
 
 	const move& get_last_move() const;
 
-	const player& get_white() const;
-	const player& get_black() const;
+    player& get_white();
+    player& get_black();
 
 	void make_move(move m);
 	bool would_be_check(move m);

@@ -11,7 +11,7 @@ using std::string;
 using std::pair;
 using position = pair<char, char>;
 
-enum special_move { SHORT_CASTLE, LONG_CASTLE, EN_PASSANT, PROMOTION, NONE };
+enum special_move { SHORT_CASTLE, LONG_CASTLE, EN_PASSANT, PROMOTION, DROP_WHITE, DROP_BLACK, NONE };
 
 class move {
 private:

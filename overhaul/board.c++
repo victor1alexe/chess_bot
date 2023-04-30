@@ -6,6 +6,9 @@
 #include "pieces/king.h"
 #include "pieces/queen.h"
 #include "pieces/pawn.h"
+#include "pieces/rook.h"
+#include "pieces/knight.h"
+#include "pieces/bishop.h"
 #include "board.h"
 
 using std::cout, std::endl;
@@ -114,11 +117,11 @@ bool board::is_in_bounds(position position) {
 	return position.first >= 'A' && position.first <= 'H' && position.second >= '1' && position.second <= '8';
 }
 
-const player& board::get_white() const {
+player& board::get_white() {
 	return white;
 }
 
-const player& board::get_black() const {
+player& board::get_black() {
 	return black;
 }
 
@@ -132,8 +135,14 @@ bool board::would_be_check(move m) {
 
 	b.make_backup();
 	b.make_move(m);
+    piece *k;
+    if (m.get_special() == DROP_WHITE)
+        k = white.get_king();
+    else if (m.get_special() == DROP_BLACK)
+        k = black.get_king();
+    else
+        k = (get_piece(m.get_to())->get_type() == WHITE) ? white.get_king() : black.get_king();
 
-	piece *k = (get_piece(m.get_to())->get_type() == WHITE) ? white.get_king() : black.get_king();
 	position king_pos = positions[k];
 
 	bool would_be_in_check = false;
@@ -388,6 +397,64 @@ void board::make_move(move m) {
     const position to = m.get_to();
 	const position from = m.get_from();
 
+    if (m.get_special() == DROP_WHITE) {
+        piece* p;
+        switch (m.get_from().first) {
+            case 'P':
+                p = new pawn(WHITE, 'A');
+                get_white().place_piece(p);
+                break;
+            case 'R':
+                p = new rook(WHITE, QUEEN);
+                get_white().place_piece(p);
+
+                break;
+            case 'N':
+                p = new knight(WHITE, QUEEN);
+                get_white().place_piece(p);
+                break;
+            case 'B':
+                p = new bishop(WHITE, QUEEN);
+                get_white().place_piece(p);
+                break;
+            case 'Q':
+                p = new queen(WHITE);
+                get_white().place_piece(p);
+                break;
+        }
+        pieces[m.get_to()] = p;
+        positions[p] = m.get_to();
+        return;
+    }
+    if (m.get_special() == DROP_BLACK) {
+        piece* p;
+        switch (m.get_from().first) {
+            case 'P':
+                p = new pawn(BLACK, 'A');
+                get_black().place_piece(p);
+                break;
+            case 'R':
+                p = new rook(BLACK, QUEEN);
+                get_black().place_piece(p);
+                break;
+            case 'N':
+                p = new knight(BLACK, QUEEN);
+                get_black().place_piece(p);
+                break;
+            case 'B':
+                p = new bishop(BLACK, QUEEN);
+                get_black().place_piece(p);
+                break;
+            case 'Q':
+                p = new queen(BLACK);
+                get_black().place_piece(p);
+                break;
+        }
+        pieces[m.get_to()] = p;
+        positions[p] = m.get_to();
+        return;
+    }
+
 	piece* attacker = get_piece(from);;
 	piece* captured = nullptr;
 
@@ -395,18 +462,18 @@ void board::make_move(move m) {
 	player& him = attacker->get_type() == WHITE ? black : white;
 
 
-        if (from.first == 'E' && (from.second == '1' || from.second == '8')) {
-            me.set_short_castle(false);
-            me.set_long_castle(false);
-        }
+    if (from.first == 'E' && (from.second == '1' || from.second == '8')) {
+        me.set_short_castle(false);
+        me.set_long_castle(false);
+    }
 
-        if (from.first == 'H' && (from.second == '1' || from.second == '8')) {
-            me.set_short_castle(false);
-        }
+    if (from.first == 'H' && (from.second == '1' || from.second == '8')) {
+        me.set_short_castle(false);
+    }
 
-        if (from.first == 'A' && (from.second == '1' || from.second == '8')) {
-            me.set_long_castle(false);
-        }
+    if (from.first == 'A' && (from.second == '1' || from.second == '8')) {
+        me.set_long_castle(false);
+    }
 
 
 	switch (m.get_special()) {
@@ -444,6 +511,7 @@ void board::make_move(move m) {
 
 			me.capture_piece(captured);
 			him.remove_piece(captured);
+
 			pieces.erase((*this)[captured]);
 			positions.erase(captured);
 
@@ -452,6 +520,8 @@ void board::make_move(move m) {
 
 			pieces[to] = attacker;
 			positions[attacker] = to;
+
+            // delete captured;
             reset_moves_since_last_capture();
 			break;
 
@@ -466,6 +536,7 @@ void board::make_move(move m) {
 				him.remove_piece(captured);
 				pieces.erase(to);
 				positions.erase(captured);
+                // delete captured;
 			} else {
                 if (instanceof<pawn>(attacker))
                     reset_moves_since_last_capture();

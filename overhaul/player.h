@@ -14,7 +14,13 @@ class player {
 private:
 	player_type type;
 	vector<piece*> pieces_on_board;
-	vector<piece*> pieces_in_hand;
+
+    int queens_in_hand;
+    int rooks_in_hand;
+    int knights_in_hand;
+    int bishops_in_hand;
+    int pawns_in_hand;
+
 	bool in_check;
 	piece* my_king;
 
@@ -34,8 +40,6 @@ public:
     void set_long_castle(bool long_castle);
     void set_short_castle(bool short_castle);
 
-    vector<piece*> get_pieces_in_hand() const;
-
 	piece* get_king() const;
 
 	void set_in_check(bool in_check);
@@ -46,6 +50,8 @@ public:
 	auto end() -> decltype(pieces_on_board.end());
 	piece* operator[](int index);
 	vector<move> get_possible_moves() const;
+
+    vector<move> get_possible_drops();
 
 	bool can_short_castle() const;
 	bool can_long_castle() const;
