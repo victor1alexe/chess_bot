@@ -79,17 +79,21 @@ void protocol::handleMoveCommand(const string& command) {
             b.make_move(move::SHORT_CASTLE_WHITE);
         } else if (string_move == "e1c1") {
             b.make_move(move::LONG_CASTLE_WHITE);
-        }
+        } else {
+			b.make_move(move(command.substr(9)));
+		}
     } else if (instanceof<king>(b[{'E', '8'}])) {
-        if (string_move == "e8g8") {
-            b.make_move(move::SHORT_CASTLE_BLACK);
-        } else if (string_move == "e8c8") {
-            b.make_move(move::LONG_CASTLE_BLACK);
-        }
-    } else {
-        move m = move(command.substr(9));
-        b.make_move(m);
-    }
+		if (string_move == "e8g8") {
+			b.make_move(move::SHORT_CASTLE_BLACK);
+		} else if (string_move == "e8c8") {
+			b.make_move(move::LONG_CASTLE_BLACK);
+		} else {
+			b.make_move(move(command.substr(9)));
+		}
+	} else {
+		b.make_move(move(command.substr(9)));
+	}
+
     //debug::print_board();
 
 // 	Send the best move to the GUI
