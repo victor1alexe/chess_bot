@@ -1,7 +1,3 @@
-//
-// Created by Eduard Andrei Radu on 26.04.2023.
-//
-
 #include "../board.h"
 #include "pawn.h"
 
@@ -49,7 +45,14 @@ vector<move> pawn::get_possible_moves() {
 			next_pos = position(pos.first, pos.second + 1);
 			if (board.is_valid_move(move(pos, next_pos))
 				&& board[next_pos] == nullptr) {
-				moves.emplace_back(pos, next_pos);
+                if (next_pos.second == '8') {
+                    moves.emplace_back(pos, next_pos, PROMOTION_KNIGHT);
+                    moves.emplace_back(pos, next_pos, PROMOTION_BISHOP);
+                    moves.emplace_back(pos, next_pos, PROMOTION_ROOK);
+                    moves.emplace_back(pos, next_pos, PROMOTION_QUEEN);
+                } else {
+                    moves.emplace_back(pos, next_pos);
+                }
 			}
 
 			// double-up
@@ -104,7 +107,14 @@ vector<move> pawn::get_possible_moves() {
 			next_pos = position(pos.first, pos.second - 1);
 			if (board.is_valid_move(move(pos, next_pos))
 				&& board[next_pos] == nullptr) {
-				moves.emplace_back(pos, next_pos);
+                if (next_pos.second == '1') {
+                    moves.emplace_back(pos, next_pos, PROMOTION_QUEEN);
+                    moves.emplace_back(pos, next_pos, PROMOTION_BISHOP);
+                    moves.emplace_back(pos, next_pos, PROMOTION_KNIGHT);
+                    moves.emplace_back(pos, next_pos, PROMOTION_ROOK);
+                } else {
+                    moves.emplace_back(pos, next_pos);
+                }
 			}
 
 			// double-down

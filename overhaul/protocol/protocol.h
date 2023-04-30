@@ -1,9 +1,3 @@
-
-//
-// Created by Eduard Andrei Radu on 25.04.2023.
-//
-
-
 #ifndef CRAZYHOUSE_PROTOCOL_H
 #define CRAZYHOUSE_PROTOCOL_H
 

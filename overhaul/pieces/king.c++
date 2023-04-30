@@ -1,7 +1,3 @@
-//
-// Created by Eduard Andrei Radu on 26.04.2023.
-//
-
 #include "../board.h"
 #include "king.h"
 

@@ -1,7 +1,3 @@
-//
-// Created by Eduard Andrei Radu on 26.04.2023.
-//
-
 #include "board.h"
 #include "debug/debug.h"
 #include "move.h"
@@ -105,7 +101,6 @@ void play_protocol() {
 int main() {
     //play_random();
     play_protocol();
-
 
 	return 0;
 }

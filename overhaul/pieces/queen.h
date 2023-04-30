@@ -1,7 +1,3 @@
-//
-// Created by Eduard Andrei Radu on 26.04.2023.
-//
-
 #ifndef CRAZYHOUSE_QUEEN_H
 #define CRAZYHOUSE_QUEEN_H
 

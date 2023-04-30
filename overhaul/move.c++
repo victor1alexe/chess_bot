@@ -1,7 +1,3 @@
-//
-// Created by Eduard Andrei Radu on 21.04.2023.
-//
-
 #include "move.h"
 #include "board.h"
 #include "piece.h"
@@ -42,10 +38,21 @@ string move::to_string() const {
         }
     }
 
-    return string(1, tolower(from.first)) +
-           string(1, from.second) +
-           string(1, tolower(to.first)) +
-           string(1, to.second);
+
+    string s =  string(1, tolower(from.first)) +
+                string(1, from.second) +
+                string(1, tolower(to.first)) +
+                string(1, to.second);
+
+    switch (special) {
+        case PROMOTION_QUEEN : return s + "q";
+        case PROMOTION_ROOK : return s + "r";
+        case PROMOTION_BISHOP : return s + "b";
+        case PROMOTION_KNIGHT : return s + "n";
+        default : return s;
+    }
+
+
 }
 
 

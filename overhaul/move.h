@@ -1,7 +1,3 @@
-//
-// Created by Eduard Andrei Radu on 21.04.2023.
-//
-
 #ifndef CRAZYHOUSE_MOVE_H
 #define CRAZYHOUSE_MOVE_H
 
@@ -11,7 +7,8 @@ using std::string;
 using std::pair;
 using position = pair<char, char>;
 
-enum special_move { SHORT_CASTLE, LONG_CASTLE, EN_PASSANT, PROMOTION, DROP_WHITE, DROP_BLACK, NONE };
+enum special_move { SHORT_CASTLE, LONG_CASTLE, EN_PASSANT, DROP_WHITE,
+        DROP_BLACK, PROMOTION_ROOK, PROMOTION_QUEEN, PROMOTION_KNIGHT, PROMOTION_BISHOP, NONE };
 
 class move {
 private:

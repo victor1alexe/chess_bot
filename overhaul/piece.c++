@@ -1,7 +1,3 @@
-//
-// Created by Eduard Andrei Radu on 26.04.2023.
-//
-
 #include "piece.h"
 #include "board.h"
 #include <iostream>

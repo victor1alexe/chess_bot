@@ -1,7 +1,3 @@
-//
-// Created by Eduard Andrei Radu on 26.04.2023.
-//
-
 #include "player.h"
 #include "board.h"
 #include "piece.h"
@@ -73,6 +69,7 @@ void player::place_piece(piece* p) {
         bishops_in_hand--;
     else if (instanceof<pawn>(p))
         pawns_in_hand--;
+    pieces_on_board.push_back(p);
 }
 
 bool player::can_long_castle() const {

@@ -1,7 +1,3 @@
-//
-// Created by Eduard Andrei Radu on 26.04.2023.
-//
-
 #include <iostream>
 #include "pieces/king.h"
 #include "pieces/queen.h"
@@ -433,6 +429,9 @@ void board::make_move(move m) {
         pieces[m.get_to()] = p;
         positions[p] = m.get_to();
         moves.push(m);
+        reset_moves_since_last_capture();
+        get_black().set_in_check(p->see_king());
+        get_white().set_in_check(false);
         return;
     }
     if (m.get_special() == DROP_BLACK) {
@@ -462,6 +461,9 @@ void board::make_move(move m) {
         pieces[m.get_to()] = p;
         positions[p] = m.get_to();
         moves.push(m);
+        reset_moves_since_last_capture();
+        get_white().set_in_check(p->see_king());
+        get_black().set_in_check(false);
         return;
     }
 
@@ -535,29 +537,27 @@ void board::make_move(move m) {
             reset_moves_since_last_capture();
 			break;
 
-		case PROMOTION:
-			break;
-		default:
-			captured = get_piece(to);
+		case PROMOTION_QUEEN:
+            captured = get_piece(to);
 
-			if (captured != nullptr) {
+            if (captured != nullptr) {
                 reset_moves_since_last_capture();
-				me.capture_piece(captured);
-				him.remove_piece(captured);
-				pieces.erase(to);
-				positions.erase(captured);
+                me.capture_piece(captured);
+                him.remove_piece(captured);
+                pieces.erase(to);
+                positions.erase(captured);
                 // delete captured;
-			} else {
+            } else {
                 if (instanceof<pawn>(attacker))
                     reset_moves_since_last_capture();
                 else
                     increment_moves_since_last_capture();
             }
-			pieces.erase(from);
-			positions.erase(attacker);
+            pieces.erase(from);
+            positions.erase(attacker);
 
-			pieces[to] = attacker;
-			positions[attacker] = to;
+            pieces[to] = attacker;
+            positions[attacker] = to;
 
             // check if white pawn is on last line to promote
             if (attacker->get_type() == WHITE && to.second == '8' && instanceof<pawn>(attacker)) {
@@ -581,6 +581,166 @@ void board::make_move(move m) {
                 pieces[to] = attacker;
                 positions[attacker] = to;
             }
+			break;
+
+        case PROMOTION_KNIGHT:
+            captured = get_piece(to);
+
+            if (captured != nullptr) {
+                reset_moves_since_last_capture();
+                me.capture_piece(captured);
+                him.remove_piece(captured);
+                pieces.erase(to);
+                positions.erase(captured);
+                // delete captured;
+            } else {
+                if (instanceof<pawn>(attacker))
+                    reset_moves_since_last_capture();
+                else
+                    increment_moves_since_last_capture();
+            }
+            pieces.erase(from);
+            positions.erase(attacker);
+
+            pieces[to] = attacker;
+            positions[attacker] = to;
+
+            // check if white pawn is on last line to promote
+            if (attacker->get_type() == WHITE && to.second == '8' && instanceof<pawn>(attacker)) {
+                //cout << "Promotion WHITE" << endl;
+                me.remove_piece(attacker);
+                pieces.erase(to);
+                positions.erase(attacker);
+                attacker = new knight(WHITE, QUEEN);
+                attacker->set_promotion(true);
+                me.add_piece(attacker);
+                pieces[to] = attacker;
+                positions[attacker] = to;
+            } else if (attacker->get_type() == BLACK && to.second == '1' && instanceof<pawn>(attacker)) {
+                //cout << "Promotion BLACK" << endl;
+                me.remove_piece(attacker);
+                pieces.erase(to);
+                positions.erase(attacker);
+                attacker = new knight(BLACK, QUEEN);
+                attacker->set_promotion(true);
+                me.add_piece(attacker);
+                pieces[to] = attacker;
+                positions[attacker] = to;
+            }
+            break;
+
+        case PROMOTION_BISHOP:
+            captured = get_piece(to);
+
+            if (captured != nullptr) {
+                reset_moves_since_last_capture();
+                me.capture_piece(captured);
+                him.remove_piece(captured);
+                pieces.erase(to);
+                positions.erase(captured);
+                // delete captured;
+            } else {
+                if (instanceof<pawn>(attacker))
+                    reset_moves_since_last_capture();
+                else
+                    increment_moves_since_last_capture();
+            }
+            pieces.erase(from);
+            positions.erase(attacker);
+
+            pieces[to] = attacker;
+            positions[attacker] = to;
+
+            // check if white pawn is on last line to promote
+            if (attacker->get_type() == WHITE && to.second == '8' && instanceof<pawn>(attacker)) {
+                me.remove_piece(attacker);
+                pieces.erase(to);
+                positions.erase(attacker);
+                attacker = new bishop(WHITE);
+                attacker->set_promotion(true);
+                me.add_piece(attacker);
+                pieces[to] = attacker;
+                positions[attacker] = to;
+            } else if (attacker->get_type() == BLACK && to.second == '1' && instanceof<pawn>(attacker)) {
+                me.remove_piece(attacker);
+                pieces.erase(to);
+                positions.erase(attacker);
+                attacker = new bishop(BLACK);
+                attacker->set_promotion(true);
+                me.add_piece(attacker);
+                pieces[to] = attacker;
+                positions[attacker] = to;
+            }
+            break;
+
+        case PROMOTION_ROOK:
+            captured = get_piece(to);
+
+            if (captured != nullptr) {
+                reset_moves_since_last_capture();
+                me.capture_piece(captured);
+                him.remove_piece(captured);
+                pieces.erase(to);
+                positions.erase(captured);
+                // delete captured;
+            } else {
+                if (instanceof<pawn>(attacker))
+                    reset_moves_since_last_capture();
+                else
+                    increment_moves_since_last_capture();
+            }
+            pieces.erase(from);
+            positions.erase(attacker);
+
+            pieces[to] = attacker;
+            positions[attacker] = to;
+
+            // check if white pawn is on last line to promote
+            if (attacker->get_type() == WHITE && to.second == '8' && instanceof<pawn>(attacker)) {
+                //cout << "Promotion WHITE" << endl;
+                me.remove_piece(attacker);
+                pieces.erase(to);
+                positions.erase(attacker);
+                attacker = new rook(WHITE);
+                attacker->set_promotion(true);
+                me.add_piece(attacker);
+                pieces[to] = attacker;
+                positions[attacker] = to;
+            } else if (attacker->get_type() == BLACK && to.second == '1' && instanceof<pawn>(attacker)) {
+                //cout << "Promotion BLACK" << endl;
+                me.remove_piece(attacker);
+                pieces.erase(to);
+                positions.erase(attacker);
+                attacker = new rook(BLACK);
+                attacker->set_promotion(true);
+                me.add_piece(attacker);
+                pieces[to] = attacker;
+                positions[attacker] = to;
+            }
+            break;
+
+		default:
+			captured = get_piece(to);
+
+			if (captured != nullptr) {
+                reset_moves_since_last_capture();
+				me.capture_piece(captured);
+				him.remove_piece(captured);
+				pieces.erase(to);
+				positions.erase(captured);
+                // delete captured;
+			} else {
+                if (instanceof<pawn>(attacker))
+                    reset_moves_since_last_capture();
+                else
+                    increment_moves_since_last_capture();
+            }
+			pieces.erase(from);
+			positions.erase(attacker);
+
+			pieces[to] = attacker;
+			positions[attacker] = to;
+
 			break;
 	}
 
