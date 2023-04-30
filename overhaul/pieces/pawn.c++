@@ -85,7 +85,8 @@ vector<move> pawn::get_possible_moves() {
 			if (last_move.get_from().second == '7' &&
                 last_move.get_to().second == '5' &&
                 last_move.get_to().second == pos.second &&
-                instanceof<pawn>(board[last_move.get_to()])) {
+                instanceof<pawn>(board[last_move.get_to()]) &&
+				board.is_valid_move(move(pos, position(pos.first + 1, '6')))) {
 				if (last_move.get_to().first == pos.first + 1)
 					moves.emplace_back(pos, position(pos.first + 1, '6'));
 				if (last_move.get_to().first == pos.first - 1)
@@ -133,7 +134,8 @@ vector<move> pawn::get_possible_moves() {
 			if (last_move.get_from().second == '2' &&
                 last_move.get_to().second == '4' &&
                 last_move.get_to().second == pos.second &&
-                instanceof<pawn>(board[last_move.get_to()])){
+                instanceof<pawn>(board[last_move.get_to()]) &&
+				board.is_valid_move(move(pos, position(pos.first + 1, '3')))) {
                 if (last_move.get_to().first == pos.first + 1)
                     moves.emplace_back(pos, position(pos.first + 1, '3'));
                 if (last_move.get_to().first == pos.first - 1)

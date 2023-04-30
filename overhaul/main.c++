@@ -114,8 +114,8 @@ void play_protocol() {
 }
 
 int main() {
-    //play_random();
-    play_protocol();
+    play_random();
+    //play_protocol();
 
 
 	return 0;
