@@ -120,7 +120,7 @@ vector<move> player::get_possible_drops() {
     vector<move> moves = {};
     board& b = board::get_instance();
     vector<position> possible_places = {};
-    for (int i = 1; i <= 8; i++) {
+    for (char i = '1'; i <= '8'; i++) {
         for (char j = 'A'; j <= 'H'; j++) {
             if (b[position(j, i)] == nullptr) {
                 possible_places.emplace_back(j, i);

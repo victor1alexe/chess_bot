@@ -10,100 +10,116 @@ recognized 'normal' (-1) as variant normal
 GameEnds(0, (null), 2)
 shuffleOpenings = 0
 StartChildProcess (dir=".") ./crazyhouse
-162 >first : xboard
+166 >first : xboard
 protover 2
-168 <first : xboard
-168 <first : feature done=0 sigint=0 sigterm=0 san=0 reuse=0 usermove=1 analyze=0 ping=0 setboard=0 level=0 variants="crazyhouse" name="CrazyHouse" myname="CrazyHouse" done=1
-168 >first : accepted done
-168 >first : accepted sigint
-168 >first : accepted sigterm
-168 >first : accepted san
-168 >first : accepted reuse
-169 >first : accepted usermove
-169 >first : accepted analyze
-169 >first : accepted ping
-169 >first : accepted setboard
-169 >first : accepted level
-169 >first : accepted variants
-169 >first : accepted name
-169 >first : accepted myname
-169 >first : accepted done
-169 <first : 
+184 <first : xboard
+184 <first : feature done=0 sigint=0 sigterm=0 san=0 reuse=0 usermove=1 analyze=0 ping=0 setboard=0 level=0 variants="crazyhouse" name="CrazyHouse" myname="CrazyHouse" done=1
+184 >first : accepted done
+184 >first : accepted sigint
+184 >first : accepted sigterm
+184 >first : accepted san
+184 >first : accepted reuse
+184 >first : accepted usermove
+184 >first : accepted analyze
+184 >first : accepted ping
+184 >first : accepted setboard
+184 >first : accepted level
+185 >first : accepted variants
+185 >first : accepted name
+185 >first : accepted myname
+185 >first : accepted done
+185 <first : 
 recognized 'crazyhouse' (-1) as variant crazyhouse
 Reset(1, 0) from gameMode 0
 recognized 'crazyhouse' (-1) as variant crazyhouse
 GameEnds(0, (null), 2)
-171 >first : quit
+194 >first : quit
 shuffleOpenings = 0
 StartChildProcess (dir=".") ./crazyhouse
-222 >first : xboard
+234 >first : xboard
 protover 2
-222 >first : new
+235 >first : new
 random
-223 >first : variant crazyhouse
-226 >first : level 40 5 0
-228 >first : post
-234 >first : hard
-266 <first : xboard
-267 <first : feature done=0 sigint=0 sigterm=0 san=0 reuse=0 usermove=1 analyze=0 ping=0 setboard=0 level=0 variants="crazyhouse" name="CrazyHouse" myname="CrazyHouse" done=1
-267 >first : accepted done
-271 >first : accepted sigint
-272 >first : accepted sigterm
-272 >first : accepted san
-272 >first : accepted reuse
-273 >first : accepted usermove
-273 >first : accepted analyze
-273 >first : accepted ping
-273 >first : accepted setboard
-274 >first : accepted level
-281 >first : accepted variants
-281 >first : accepted name
-281 >first : accepted myname
-281 >first : accepted done
-281 <first : 
-6883 >first : black
-6883 >first : time 30000
-6883 >first : otim 30000
-6883 >first : white
+235 >first : variant crazyhouse
+235 >first : level 40 5 0
+235 >first : post
+235 >first : hard
+253 <first : xboard
+253 <first : feature done=0 sigint=0 sigterm=0 san=0 reuse=0 usermove=1 analyze=0 ping=0 setboard=0 level=0 variants="crazyhouse" name="CrazyHouse" myname="CrazyHouse" done=1
+253 >first : accepted done
+253 >first : accepted sigint
+253 >first : accepted sigterm
+253 >first : accepted san
+253 >first : accepted reuse
+253 >first : accepted usermove
+253 >first : accepted analyze
+253 >first : accepted ping
+253 >first : accepted setboard
+254 >first : accepted level
+254 >first : accepted variants
+254 >first : accepted name
+254 >first : accepted myname
+254 >first : accepted done
+254 <first : 
+4950 >first : black
+4950 >first : time 30000
+4950 >first : otim 30000
+4950 >first : white
 book hit = (NULL)
-6884 >first : go
+4950 >first : go
 nps: w=-1, b=-1
-6888 <first : move e2e4
-9665 >first : time 29999
-9666 >first : otim 29722
+4953 <first : move e2e3
+11955 >first : time 29999
+11955 >first : otim 29299
 book hit = (NULL)
-9666 >first : usermove 9666 >first : f7f5
-9744 <first : move f2f3
-10982 >first : time 29992
-10982 >first : otim 29598
+11955 >first : usermove 11955 >first : f7f5
+12039 <first : move a2a4
+14743 >first : time 29991
+14743 >first : otim 29029
 book hit = (NULL)
-10983 >first : usermove 10983 >first : f5e4
-11058 <first : move c2c4
-Drop move 20, curr=5, x=0,y=7, p=66
-LegalDrop: 66 @ 8,4)
-LegalDrop: 66 @ 8,4)
-15521 >first : time 29984
-15521 >first : otim 29152
+14743 >first : usermove 14743 >first : g8f6
+14844 <first : move d1g4
+16434 >first : time 29981
+16434 >first : otim 28870
 book hit = (NULL)
-15521 >first : usermove 15521 >first : P@g5
-15525 <first : move g2g3
-27090 >first : time 29983
-27090 >first : otim 27995
+16434 >first : usermove 16435 >first : f6g4
+16533 <first : move h2h3
+Drop move 20, curr=7, x=0,y=3, p=70
+LegalDrop: 70 @ 4,4)
+LegalDrop: 70 @ 4,4)
+21916 >first : time 29971
+21916 >first : otim 28332
 book hit = (NULL)
-27090 >first : usermove 27090 >first : h7h5
-27168 <first : move c4c5
-30055 >first : time 29976
-30055 >first : otim 27707
+21916 >first : usermove 21916 >first : Q@c5
+21918 <first : move f1b5
+24844 >first : time 29971
+24844 >first : otim 28039
 book hit = (NULL)
-30055 >first : usermove 30055 >first : g8f6
-30155 <first : move d1b3
-31384 >first : time 29966
-31385 >first : otim 27584
+24844 >first : usermove 24844 >first : c5b5
+24921 <first : move g1e2
+Drop move 20, curr=11, x=0,y=5, p=68
+LegalDrop: 68 @ 4,3)
+LegalDrop: 68 @ 4,3)
+28030 >first : time 29963
+28030 >first : otim 27728
 book hit = (NULL)
-31385 >first : usermove 31385 >first : f6g4
-31501 <first : move f1g2
-35363 >first : time 29954
-35363 >first : otim 27198
+28030 >first : usermove 28030 >first : B@c4
+28034 <first : move e3e4
+29652 >first : time 29962
+29652 >first : otim 27566
 book hit = (NULL)
-35363 >first : usermove 35363 >first : e4f3
-35446 <first : move b3a3
+29653 >first : usermove 29653 >first : c4e2
+29756 <first : move h1g1
+Drop move 20, curr=15, x=0,y=6, p=67
+LegalDrop: 67 @ 5,4)
+LegalDrop: 67 @ 5,4)
+31700 >first : time 29952
+31700 >first : otim 27372
+book hit = (NULL)
+31700 >first : usermove 31701 >first : N@d5
+31702 <first : move a1a3
+32974 >first : time 29952
+32975 >first : otim 27245
+book hit = (NULL)
+32975 >first : usermove 32975 >first : d5c3
+33080 <first : move d2d3
