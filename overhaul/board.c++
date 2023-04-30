@@ -444,7 +444,7 @@ void board::make_move(move m) {
 
 			me.capture_piece(captured);
 			him.remove_piece(captured);
-			pieces.erase(to);
+			pieces.erase((*this)[captured]);
 			positions.erase(captured);
 
 			pieces.erase(from);
@@ -452,6 +452,7 @@ void board::make_move(move m) {
 
 			pieces[to] = attacker;
 			positions[attacker] = to;
+
             reset_moves_since_last_capture();
 			break;
 
