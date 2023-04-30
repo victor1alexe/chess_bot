@@ -25,7 +25,9 @@ void play_random() {
             break;
         }
 
-		vector<move> moves = b.get_white().get_possible_moves();
+        vector<move> moves = b.get_white().get_possible_moves();
+        vector<move> drops = b.get_white().get_possible_drops();
+        moves.insert(moves.end(), drops.begin(), drops.end());
         cout << "_____" << endl;
 
 		if (moves.empty() && b.get_white().is_in_check()) {
@@ -46,7 +48,9 @@ void play_random() {
 		if (b.get_black().is_in_check())
 			cout << "Black is in check!" << endl;
 
-		moves = b.get_black().get_possible_moves();
+        moves = b.get_black().get_possible_moves();
+        drops = b.get_black().get_possible_drops();
+        moves.insert(moves.end(), drops.begin(), drops.end());
         cout << "_____" << endl;
 		if (moves.empty() && b.get_black().is_in_check()) {
 			cout << "White wins!"

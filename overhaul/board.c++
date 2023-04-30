@@ -151,66 +151,74 @@ bool board::would_be_check(move m) {
 
 	for (int i = 1; i < 8; i++) {
 		p = position(king_pos.first + i, king_pos.second + i);
-		if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
-			pieces.push_back(b[p]);
-			break;
+		if (b.is_in_bounds(p) && (b[p] != nullptr)) {
+            if (b[p]->get_type() != k->get_type())
+                pieces.push_back(b[p]);
+            break;
 		}
 	}
 
 	for (int i = 1; i < 8; i++) {
 		p = position(king_pos.first - i, king_pos.second + i);
-		if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
-			pieces.push_back(b[p]);
-			break;
-		}
+        if (b.is_in_bounds(p) && (b[p] != nullptr)) {
+            if (b[p]->get_type() != k->get_type())
+                pieces.push_back(b[p]);
+            break;
+        }
 	}
 
 	for (int i = 1; i < 8; i++) {
 		p = position(king_pos.first + i, king_pos.second - i);
-		if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
-			pieces.push_back(b[p]);
-			break;
-		}
+        if (b.is_in_bounds(p) && (b[p] != nullptr)) {
+            if (b[p]->get_type() != k->get_type())
+                pieces.push_back(b[p]);
+            break;
+        }
 	}
 
 	for (int i = 1; i < 8; i++) {
 		p = position(king_pos.first - i, king_pos.second - i);
-		if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
-			pieces.push_back(b[p]);
-			break;
-		}
+        if (b.is_in_bounds(p) && (b[p] != nullptr)) {
+            if (b[p]->get_type() != k->get_type())
+                pieces.push_back(b[p]);
+            break;
+        }
 	}
 
 	for (int i = 1; i < 8; i++) {
 		p = position(king_pos.first + i, king_pos.second);
-		if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
-			pieces.push_back(b[p]);
-			break;
-		}
+        if (b.is_in_bounds(p) && (b[p] != nullptr)) {
+            if (b[p]->get_type() != k->get_type())
+                pieces.push_back(b[p]);
+            break;
+        }
 	}
 
 	for (int i = 1; i < 8; i++) {
 		p = position(king_pos.first - i, king_pos.second);
-		if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
-			pieces.push_back(b[p]);
-			break;
-		}
+        if (b.is_in_bounds(p) && (b[p] != nullptr)) {
+            if (b[p]->get_type() != k->get_type())
+                pieces.push_back(b[p]);
+            break;
+        }
 	}
 
 	for (int i = 1; i < 8; i++) {
 		p = position(king_pos.first, king_pos.second + i);
-		if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
-			pieces.push_back(b[p]);
-			break;
-		}
+        if (b.is_in_bounds(p) && (b[p] != nullptr)) {
+            if (b[p]->get_type() != k->get_type())
+                pieces.push_back(b[p]);
+            break;
+        }
 	}
 
 	for (int i = 1; i < 8; i++) {
 		p = position(king_pos.first, king_pos.second - i);
-		if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
-			pieces.push_back(b[p]);
-			break;
-		}
+        if (b.is_in_bounds(p) && (b[p] != nullptr)) {
+            if (b[p]->get_type() != k->get_type())
+                pieces.push_back(b[p]);
+            break;
+        }
 	}
 
     // Check for knights
@@ -424,6 +432,7 @@ void board::make_move(move m) {
         }
         pieces[m.get_to()] = p;
         positions[p] = m.get_to();
+        moves.push(m);
         return;
     }
     if (m.get_special() == DROP_BLACK) {
@@ -452,6 +461,7 @@ void board::make_move(move m) {
         }
         pieces[m.get_to()] = p;
         positions[p] = m.get_to();
+        moves.push(m);
         return;
     }
 

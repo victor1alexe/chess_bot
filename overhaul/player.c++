@@ -129,7 +129,7 @@ vector<move> player::get_possible_drops() {
     }
     if (pawns_in_hand != 0) {
         for (auto pos : possible_places) {
-            if (pos.second != 8 && pos.second != 1) {
+            if (pos.second != '8' && pos.second != '1') {
                 move m = move({'P', '@'}, pos, get_type() == WHITE ? DROP_WHITE : DROP_BLACK);
                 if (!b.would_be_check(m)) {
                     moves.emplace_back(m);
@@ -147,7 +147,7 @@ vector<move> player::get_possible_drops() {
     }
     if (knights_in_hand != 0) {
         for (auto pos : possible_places) {
-            move m = move({'K', '@'}, pos, get_type() == WHITE ? DROP_WHITE : DROP_BLACK);
+            move m = move({'N', '@'}, pos, get_type() == WHITE ? DROP_WHITE : DROP_BLACK);
             if (!b.would_be_check(m)) {
                 moves.emplace_back(m);
             }
