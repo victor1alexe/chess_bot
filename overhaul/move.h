@@ -33,7 +33,7 @@ public:
 	position get_to() const;
 	special_move get_special() const;
 	string to_string() const;
-	bool operator == (const move& m);
+	bool operator == (const move& m) const;
 };
 
 #endif //CRAZYHOUSE_MOVE_H

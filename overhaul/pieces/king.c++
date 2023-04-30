@@ -28,6 +28,7 @@ string king::to_string(style style) {
 			break;
 		default: break;
 	}
+    return "";
 }
 
 vector<move> king::get_possible_moves() {

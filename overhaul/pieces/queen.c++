@@ -28,6 +28,7 @@ string queen::to_string(style style) {
 			break;
 		default: break;
 	}
+    return "";
 }
 
 vector<move> queen::get_possible_moves() {

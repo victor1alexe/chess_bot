@@ -44,6 +44,7 @@ string bishop::to_string(style style) {
 			break;
 		default: break;
 	}
+    return "";
 }
 
 vector<move> bishop::get_possible_moves() {

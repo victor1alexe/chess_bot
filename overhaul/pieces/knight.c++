@@ -45,6 +45,7 @@ string knight::to_string(style style) {
 			break;
 		default: break;
 	}
+    return "";
 }
 
 vector<move> knight::get_possible_moves() {

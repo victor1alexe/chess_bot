@@ -55,27 +55,22 @@ piece *board::get_piece(position position) {
 }
 
 void board::display() const {
-	cout << "\u250F\u2501\u2501\u2501\u2533\u2501\u2501\u2501\u2533\u2501\u2501\u2501\u2533\u2501\u2501\u2501\u2533"
-	     << "\u2501\u2501\u2501\u2533\u2501\u2501\u2501\u2533\u2501\u2501\u2501\u2533\u2501\u2501\u2501\u2513"
-		 << endl;
+	cout << "┏━━━┳━━━┳━━━┳━━━┳━━━┳━━━┳━━━┳━━━┳━━━┓" << endl;
 	for (char i = '8'; i >= '1'; i--) {
+        cout << "┃ " << i << " ";
 		for (char j = 'A'; j <= 'H'; j++) {
 			position pos = position(j, i);
 			if (pieces.find(pos) == pieces.end()) {
-				cout << "\u2503   ";
+				cout << "┃   ";
 			} else {
-				cout << "\u2503 " << pieces.at(pos)->to_string(DEBUG) << ' ';
+				cout << "┃ " << pieces.at(pos)->to_string(DEBUG) << ' ';
 			}
 		}
-		cout << "\u2503" << endl;
-		if (i != '1')
-			cout << "\u2523\u2501\u2501\u2501\u254B\u2501\u2501\u2501\u254B\u2501\u2501\u2501\u254B\u2501\u2501\u2501\u254B"
-			     << "\u2501\u2501\u2501\u254B\u2501\u2501\u2501\u254B\u2501\u2501\u2501\u254B\u2501\u2501\u2501\u252B"
-				 << endl;
+		cout << "┃" << endl;
+        cout << "┣━━━╋━━━╋━━━╋━━━╋━━━╋━━━╋━━━╋━━━╋━━━┫" << endl;
 	}
-	cout << "\u2517\u2501\u2501\u2501\u253B\u2501\u2501\u2501\u253B\u2501\u2501\u2501\u253B\u2501\u2501\u2501\u253B"
-	     << "\u2501\u2501\u2501\u253B\u2501\u2501\u2501\u253B\u2501\u2501\u2501\u253B\u2501\u2501\u2501\u251B"
-		 << endl;
+    cout << "┃ O ┃ A ┃ B ┃ C ┃ D ┃ E ┃ F ┃ G ┃ H ┃" << endl;
+	cout << "┗━━━┻━━━┻━━━┻━━━┻━━━┻━━━┻━━━┻━━━┻━━━┛" << endl;
 }
 
 position& board::operator[](piece* piece) {
@@ -145,7 +140,7 @@ bool board::would_be_check(move m) {
 	position p;
 	vector<piece*> pieces = {};
 
-	for (int i = 0; i < 8; i++) {
+	for (int i = 1; i < 8; i++) {
 		p = position(king_pos.first + i, king_pos.second + i);
 		if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
 			pieces.push_back(b[p]);
@@ -153,7 +148,7 @@ bool board::would_be_check(move m) {
 		}
 	}
 
-	for (int i = 0; i < 8; i++) {
+	for (int i = 1; i < 8; i++) {
 		p = position(king_pos.first - i, king_pos.second + i);
 		if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
 			pieces.push_back(b[p]);
@@ -161,7 +156,7 @@ bool board::would_be_check(move m) {
 		}
 	}
 
-	for (int i = 0; i < 8; i++) {
+	for (int i = 1; i < 8; i++) {
 		p = position(king_pos.first + i, king_pos.second - i);
 		if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
 			pieces.push_back(b[p]);
@@ -169,7 +164,7 @@ bool board::would_be_check(move m) {
 		}
 	}
 
-	for (int i = 0; i < 8; i++) {
+	for (int i = 1; i < 8; i++) {
 		p = position(king_pos.first - i, king_pos.second - i);
 		if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
 			pieces.push_back(b[p]);
@@ -177,7 +172,7 @@ bool board::would_be_check(move m) {
 		}
 	}
 
-	for (int i = 0; i < 8; i++) {
+	for (int i = 1; i < 8; i++) {
 		p = position(king_pos.first + i, king_pos.second);
 		if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
 			pieces.push_back(b[p]);
@@ -185,7 +180,7 @@ bool board::would_be_check(move m) {
 		}
 	}
 
-	for (int i = 0; i < 8; i++) {
+	for (int i = 1; i < 8; i++) {
 		p = position(king_pos.first - i, king_pos.second);
 		if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
 			pieces.push_back(b[p]);
@@ -193,7 +188,7 @@ bool board::would_be_check(move m) {
 		}
 	}
 
-	for (int i = 0; i < 8; i++) {
+	for (int i = 1; i < 8; i++) {
 		p = position(king_pos.first, king_pos.second + i);
 		if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
 			pieces.push_back(b[p]);
@@ -201,7 +196,7 @@ bool board::would_be_check(move m) {
 		}
 	}
 
-	for (int i = 0; i < 8; i++) {
+	for (int i = 1; i < 8; i++) {
 		p = position(king_pos.first, king_pos.second - i);
 		if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
 			pieces.push_back(b[p]);
@@ -210,7 +205,6 @@ bool board::would_be_check(move m) {
 	}
 
     // Check for knights
-
     p = position(king_pos.first + 1, king_pos.second + 2);
     if (b.is_in_bounds(p) && (b[p] != nullptr) && (b[p]->get_type() != k->get_type())) {
         pieces.push_back(b[p]);
@@ -251,7 +245,6 @@ bool board::would_be_check(move m) {
         pieces.push_back(b[p]);
     }
 
-
 	std::for_each(pieces.begin(), pieces.end(), [&](piece* p) {
 		if (p->see_king()) {
 			would_be_in_check = true;
@@ -291,6 +284,7 @@ bool board::is_valid_move(move m) {
 
 bool board::is_castle_possible(player_type p_t, side s) {
 	player p = (p_t == WHITE) ? white : black;
+    if (p.is_in_check()) return false;
 	switch (p_t) {
 		case WHITE:
 			switch (s) {
@@ -391,10 +385,8 @@ bool board::is_castle_possible(player_type p_t, side s) {
 }
 
 void board::make_move(move m) {
-	const position to = m.get_to();
+    const position to = m.get_to();
 	const position from = m.get_from();
-
-
 
 	piece* attacker = get_piece(from);;
 	piece* captured = nullptr;
@@ -402,18 +394,20 @@ void board::make_move(move m) {
 	player& me = attacker->get_type() == WHITE ? white : black;
 	player& him = attacker->get_type() == WHITE ? black : white;
 
-    if (from.first == 'E' && (from.second == '1' || from.second == '8')) {
-        me.set_short_castle(false);
-        me.set_long_castle(false);
-    }
 
-    if (from.first == 'H' && (from.second == '1' || from.second == '8')) {
-        me.set_short_castle(false);
-    }
+        if (from.first == 'E' && (from.second == '1' || from.second == '8')) {
+            me.set_short_castle(false);
+            me.set_long_castle(false);
+        }
 
-    if (from.first == 'A' && (from.second == '1' || from.second == '8')) {
-        me.set_long_castle(false);
-    }
+        if (from.first == 'H' && (from.second == '1' || from.second == '8')) {
+            me.set_short_castle(false);
+        }
+
+        if (from.first == 'A' && (from.second == '1' || from.second == '8')) {
+            me.set_long_castle(false);
+        }
+
 
 	switch (m.get_special()) {
 		case SHORT_CASTLE:
@@ -444,9 +438,9 @@ void board::make_move(move m) {
 			break;
 		case EN_PASSANT:
 			if (me.get_type() == WHITE)
-				captured = get_piece(position(to.first - 1, from.second));
+				captured = get_piece(position(to.first, to.second - 1));
 			else
-				captured = get_piece(position(to.first + 1, from.second));
+				captured = get_piece(position(to.first, to.second + 1));
 
 			me.capture_piece(captured);
 			him.remove_piece(captured);
@@ -473,7 +467,10 @@ void board::make_move(move m) {
 				pieces.erase(to);
 				positions.erase(captured);
 			} else {
-                increment_moves_since_last_capture();
+                if (instanceof<pawn>(attacker))
+                    reset_moves_since_last_capture();
+                else
+                    increment_moves_since_last_capture();
             }
 			pieces.erase(from);
 			positions.erase(attacker);
@@ -483,7 +480,7 @@ void board::make_move(move m) {
 
             // check if white pawn is on last line to promote
             if (attacker->get_type() == WHITE && to.second == '8' && instanceof<pawn>(attacker)) {
-                cout << "Promotion WHITE" << endl;
+                //cout << "Promotion WHITE" << endl;
                 me.remove_piece(attacker);
                 pieces.erase(to);
                 positions.erase(attacker);
@@ -493,7 +490,7 @@ void board::make_move(move m) {
                 pieces[to] = attacker;
                 positions[attacker] = to;
             } else if (attacker->get_type() == BLACK && to.second == '1' && instanceof<pawn>(attacker)) {
-                cout << "Promotion BLACK" << endl;
+                //cout << "Promotion BLACK" << endl;
                 me.remove_piece(attacker);
                 pieces.erase(to);
                 positions.erase(attacker);

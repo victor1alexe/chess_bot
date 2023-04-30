@@ -7,6 +7,7 @@
 #include <sstream>
 #include <ctime>
 #include "protocol.h"
+#include "../pieces/king.h"
 #include "../board.h"
 #include "../debug/debug.h"
 
@@ -15,6 +16,11 @@ using std::endl;
 using std::cin;
 using std::stringstream;
 using std::string;
+
+template<typename Base, typename T>
+inline bool instanceof(const T *ptr) {
+    return dynamic_cast<const Base *>(ptr) != nullptr;
+}
 
 //	Function to send a command to the GUI
 void protocol::sendCommand(const string& command) {
@@ -65,22 +71,38 @@ void protocol::handleNewCommand() {
 void protocol::handleMoveCommand(const string& command) {
 //	Get the board
     board& b = board::get_instance();
-// 	Get the move from the command
-//    string string_move = command.substr(5);
-// TODO check castling
 
 // 	Get the move from the command
-    move m = move(command.substr(9));
-//	Update the table
-    b.make_move(m);
+    string string_move = command.substr(9);
+    if (instanceof<king>(b[{'e', '1'}])) {
+        if (string_move == "e1g1") {
+            b.make_move(move::SHORT_CASTLE_WHITE);
+        } else if (string_move == "e1c1") {
+            b.make_move(move::LONG_CASTLE_WHITE);
+        }
+    } else if (instanceof<king>(b[{'e', '8'}])) {
+        if (string_move == "e8g8") {
+            b.make_move(move::SHORT_CASTLE_BLACK);
+        } else if (string_move == "e8c8") {
+            b.make_move(move::LONG_CASTLE_BLACK);
+        }
+    } else {
+        move m = move(command.substr(9));
+        b.make_move(m);
+    }
+    //debug::print_board();
 
 // 	Send the best move to the GUI
     if (b.is_powered_on()){
         srand(time(nullptr));
         if (b.get_current_player() == WHITE) {
             vector<move> moves = b.get_white().get_possible_moves();
-            if (moves.empty()) {
-                    cout << "1/2-1/2 {Stalemate}" << endl;
+            if (moves.empty() && !b.get_white().is_in_check()) {
+                cout << "1/2-1/2 {Stalemate}" << endl;
+                return;
+            }
+            else if (moves.empty() && b.get_white().is_in_check()) {
+                cout << "0-1 {Black mates}" << endl;
                 return;
             }
 
@@ -94,8 +116,12 @@ void protocol::handleMoveCommand(const string& command) {
         } else {
             vector<move> moves = b.get_black().get_possible_moves();
 
-            if (moves.empty()) {
-                    cout << "1/2-1/2 {Stalemate}" << endl;
+            if (moves.empty() && !b.get_black().is_in_check()) {
+                cout << "1/2-1/2 {Stalemate}" << endl;
+                return;
+            }
+            else if (moves.empty() && b.get_black().is_in_check()) {
+                cout << "1-0 {White mates}" << endl;
                 return;
             }
 
@@ -117,7 +143,7 @@ void protocol::handleGoCommand() {
     srand(time(nullptr));
     if (b.get_current_player() == WHITE) {
         vector<move> moves = b.get_white().get_possible_moves();
-        if (moves.empty()) {
+        if (moves.empty() && !b.get_white().is_in_check()) {
                 cout << "1/2-1/2 {Stalemate}" << endl;
             return;
         }
@@ -130,7 +156,7 @@ void protocol::handleGoCommand() {
         sendCommand(ss.str());
     } else {
         vector<move> moves = b.get_black().get_possible_moves();
-        if (moves.empty()) {
+        if (moves.empty() && !b.get_black().is_in_check()) {
                 cout << "1/2-1/2 {Stalemate}" << endl;
             return;
         }
@@ -154,5 +180,9 @@ void protocol::handleTypeCommand(const string& player_type) {
 }
 
 void protocol::handleQuitCommand() {
-    // TODO: check if something else needs to be done
+}
+
+void protocol::handleForceCommand() {
+    board& b = board::get_instance();
+    b.set_powered_on(false);
 }

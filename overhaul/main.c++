@@ -105,8 +105,10 @@ void play_protocol() {
             protocol::handleGoCommand();
         } else if (command == "white" || command == "black") {
             protocol::handleTypeCommand(command);
-        } else if (command[0] == 'u'){
+        } else if (command[0] == 'u') {
             protocol::handleMoveCommand(command);
+        } else if (command == "force") {
+            protocol::handleForceCommand();
         }
     }
 }
@@ -114,6 +116,7 @@ void play_protocol() {
 int main() {
     //play_random();
     play_protocol();
+
 
 	return 0;
 }

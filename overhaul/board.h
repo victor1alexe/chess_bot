@@ -11,7 +11,6 @@
 
 using std::map, std::stack;
 
-
 struct backup {
 	map<position, piece*> pieces_cp;
 	map<piece*, position> positions_cp;

@@ -44,6 +44,7 @@ string rook::to_string(style style) {
 			break;
 		default: break;
 	}
+    return "";
 }
 
 vector<move> rook::get_possible_moves() {

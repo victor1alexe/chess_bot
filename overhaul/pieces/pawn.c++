@@ -33,6 +33,7 @@ string pawn::to_string(style style) {
 			break;
 		default: break;
 	}
+    return "";
 }
 
 vector<move> pawn::get_possible_moves() {
