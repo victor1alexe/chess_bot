@@ -65,21 +65,26 @@ void play_random() {
 		debug::print_board();
 		if (b.get_white().is_in_check())
 			cout << "White is in check!" << endl;
+
+		//print pieces in hand for white
+		cout << "White pieces in hand: ";
+		for (auto& piece : b.get_white().get_pieces_in_hand()) {
+			cout << piece->to_string(DEBUG) << " ";
+		}
+		cout << endl;
+
+		//print pieces in hand for black
+		cout << "Black pieces in hand: ";
+		for (auto& piece : b.get_black().get_pieces_in_hand()) {
+			cout << piece->to_string(DEBUG) << " ";
+		}
+		cout << endl;
+
+		debug::print_possible_moves(nullptr);
+		cout << endl;
+
 	}
 
-    //print pieces in hand for white
-    cout << "White pieces in hand: ";
-    for (auto& piece : b.get_white().get_pieces_in_hand()) {
-        cout << piece->to_string(DEBUG) << " ";
-    }
-    cout << endl;
-
-    //print pieces in hand for black
-    cout << "Black pieces in hand: ";
-    for (auto& piece : b.get_black().get_pieces_in_hand()) {
-        cout << piece->to_string(DEBUG) << " ";
-    }
-    cout << endl;
 
 }
 
@@ -114,8 +119,8 @@ void play_protocol() {
 }
 
 int main() {
-    //play_random();
-    play_protocol();
+    play_random();
+    // play_protocol();
 
 
 	return 0;
