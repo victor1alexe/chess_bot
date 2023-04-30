@@ -394,21 +394,6 @@ void board::make_move(move m) {
 	player& me = attacker->get_type() == WHITE ? white : black;
 	player& him = attacker->get_type() == WHITE ? black : white;
 
-
-        if (from.first == 'E' && (from.second == '1' || from.second == '8')) {
-            me.set_short_castle(false);
-            me.set_long_castle(false);
-        }
-
-        if (from.first == 'H' && (from.second == '1' || from.second == '8')) {
-            me.set_short_castle(false);
-        }
-
-        if (from.first == 'A' && (from.second == '1' || from.second == '8')) {
-            me.set_long_castle(false);
-        }
-
-
 	switch (m.get_special()) {
 		case SHORT_CASTLE:
             if (attacker->get_type() == WHITE) {
@@ -501,6 +486,19 @@ void board::make_move(move m) {
                 positions[attacker] = to;
             }
 			break;
+	}
+
+	if (from.first == 'E' && (from.second == '1' || from.second == '8')) {
+		me.set_short_castle(false);
+		me.set_long_castle(false);
+	}
+
+	if (from.first == 'H' && (from.second == '1' || from.second == '8')) {
+		me.set_short_castle(false);
+	}
+
+	if (from.first == 'A' && (from.second == '1' || from.second == '8')) {
+		me.set_long_castle(false);
 	}
 
 	him.set_in_check(attacker->see_king());
