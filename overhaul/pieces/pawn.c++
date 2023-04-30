@@ -86,10 +86,16 @@ vector<move> pawn::get_possible_moves() {
                 last_move.get_to().second == '5' &&
                 last_move.get_to().second == pos.second &&
                 instanceof<pawn>(board[last_move.get_to()])) {
-				if (last_move.get_to().first == pos.first + 1)
-					moves.emplace_back(pos, position(pos.first + 1, '6'));
-				if (last_move.get_to().first == pos.first - 1)
-					moves.emplace_back(pos, position(pos.first - 1, '6'));
+				if (last_move.get_to().first == pos.first + 1) {
+                    move m = move(pos, position(pos.first + 1, '6'), EN_PASSANT);
+                    if (!board.would_be_check(m))
+                        moves.emplace_back(m);
+                }
+				if (last_move.get_to().first == pos.first - 1) {
+                    move m = move(pos, position(pos.first - 1, '6'), EN_PASSANT);
+                    if (!board.would_be_check(m))
+                        moves.emplace_back(m);
+                }
             }
 			break;
 		}
@@ -134,10 +140,16 @@ vector<move> pawn::get_possible_moves() {
                 last_move.get_to().second == '4' &&
                 last_move.get_to().second == pos.second &&
                 instanceof<pawn>(board[last_move.get_to()])){
-                if (last_move.get_to().first == pos.first + 1)
-                    moves.emplace_back(pos, position(pos.first + 1, '3'));
-                if (last_move.get_to().first == pos.first - 1)
-                    moves.emplace_back(pos, position(pos.first - 1, '3'));
+                if (last_move.get_to().first == pos.first + 1) {
+                    move m = move(pos, position(pos.first + 1, '3'), EN_PASSANT);
+                    if (!board.would_be_check(m))
+                        moves.emplace_back(m);
+                }
+                if (last_move.get_to().first == pos.first - 1) {
+                    move m = move(pos, position(pos.first - 1, '3'), EN_PASSANT);
+                    if (!board.would_be_check(m))
+                        moves.emplace_back(m);
+                }
             }
 			break;
 		}

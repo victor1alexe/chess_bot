@@ -10,6 +10,7 @@
 #include "../pieces/king.h"
 #include "../board.h"
 #include "../debug/debug.h"
+#include "../pieces/pawn.h"
 
 using std::cout;
 using std::endl;
@@ -71,26 +72,49 @@ void protocol::handleNewCommand() {
 void protocol::handleMoveCommand(const string& command) {
 //	Get the board
     board& b = board::get_instance();
+    bool made_move = false;
 
 // 	Get the move from the command
+    // 	Get the move from the command
     string string_move = command.substr(9);
-    if (instanceof<king>(b[{'e', '1'}])) {
+    move m = move(command.substr(9));
+    if (instanceof<king>(b[{'E', '1'}])) {
         if (string_move == "e1g1") {
             b.make_move(move::SHORT_CASTLE_WHITE);
+            made_move = true;
         } else if (string_move == "e1c1") {
             b.make_move(move::LONG_CASTLE_WHITE);
+            made_move = true;
         }
-    } else if (instanceof<king>(b[{'e', '8'}])) {
+    }
+    if (instanceof<king>(b[{'E', '8'}]) && !made_move) {
         if (string_move == "e8g8") {
             b.make_move(move::SHORT_CASTLE_BLACK);
+            made_move = true;
         } else if (string_move == "e8c8") {
             b.make_move(move::LONG_CASTLE_BLACK);
+            made_move = true;
         }
-    } else {
-        move m = move(command.substr(9));
-        b.make_move(m);
     }
-    //debug::print_board();
+
+
+    if (!made_move &&
+        instanceof<pawn>(b[m.get_from()]) &&
+        abs(m.get_from().first - m.get_to().first) == 1 &&
+        abs(m.get_from().second - m.get_to().second) == 1 &&
+        b[m.get_to()] == nullptr) {
+
+        //cout << "user made en passant move" << endl;
+        made_move = true;
+        b.make_move(move(m.get_from(), m.get_to(), EN_PASSANT));
+    }
+    if (!made_move) {
+        b.make_move(move(command.substr(9)));
+        made_move = true;
+    }
+
+
+    debug::print_board();
 
 // 	Send the best move to the GUI
     if (b.is_powered_on()){
